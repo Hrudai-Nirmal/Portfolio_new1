@@ -20,28 +20,21 @@ Build Hrudai Nirmal's portfolio as a dark, immersive, scroll-driven website with
 - Follow the user's supplied AGENTS.md working agreements, including naming, public-function JSDoc, input validation, explicit async error handling, and root-cause fixes.
 - Maintain this file as project behavior and decisions evolve.
 
-## Current state and gotchas
-- The local folder and remote repository were empty at initial inspection.
-- Next.js App Router application with strict TypeScript and Playwright browser tests is now configured.
-- The home route currently contains only the SVG-based animated peacock background for review; hero copy and layout are still pending.
-- Browser tests were observed failing on the empty scaffold, then passing with the renderer. Pause, frame changes, reduced motion, and mobile overflow are covered.
+## Current state
+- The home route contains only the static binary peacock on the right. Hero copy, navigation, and later sections remain pending.
+- User explicitly requested no animation for this artwork. The canvas, WebGL renderer, playback control, and animation lifecycle code were removed.
+- Use `assets/peacock-source.svg`, the unmodified user-provided `ascii-art (2).svg`, as the source of truth for the artwork (849.6 × 1280, 4,472 text glyphs).
+- `public/peacock.svg` is the cleaned, transparent SVG served to visitors. It preserves binary `0`/`1` text, uses local monospace, and has no external font requests.
+- Regenerate with `node scripts/clean-peacock.mjs`. The script traces the silhouette to discard surrounding mesh glyphs and interpolates missing or darkened head/neck cells from nearby visible colors. The eye and crest retain their original negative space. Repairs estimate hidden detail; they do not recover it exactly.
+- Original proportions are preserved with a right-aligned image and an empty left column. The stage remains 100dvh; mobile artwork is bottom-aligned and at most 80vw.
 
-## Hero background — first slice
-- Reference: user-provided five-second `peacockvid.mp4`; source artwork: `peacockvector.svg` (844.8 × 1280, 7,040 paths, approximately 1.1 MB).
-- Recreate the dark blue/cyan character-texture shimmer with gentle spatial distortion using the SVG as a WebGL texture. A static SVG cannot reconstruct the changing poses in the video; this is an approximation for review.
-- The stage remains one viewport high. The peacock now keeps its original 0.66 aspect ratio and sits on the right, leaving the left side clear for future hero copy. On narrow screens it occupies up to 80% of the width and is bottom-aligned. The earlier full-width stretching request was reverted.
-- Use native WebGL to avoid a graphics-library dependency and animating thousands of SVG DOM nodes.
-- Add Next.js, React, and React DOM (MIT) for the agreed application foundation. Next.js is approximately 186 MB unpacked before platform binaries; React approximately 179 KB. These package sizes are installation sizes, not client bundles.
-- TypeScript and Playwright (Apache-2.0), plus MIT type declarations, are development tooling only. Playwright needs a separate browser download for real GPU/browser verification; it is not shipped to visitors.
-- Defer GSAP/ScrollTrigger, Lenis, Zustand, and shadcn until the sections require their capabilities.
+## Dependencies and decisions
+- Next.js, React, and React DOM (MIT) provide the agreed application foundation. Next.js was approximately 186 MB unpacked before platform binaries at installation; React approximately 179 KB. These are installation sizes, not client bundles.
+- TypeScript and Playwright (Apache-2.0), plus MIT type declarations, are development tooling only. Playwright's separate browser download is not shipped to visitors.
+- No image processing dependency is needed: cleanup edits native SVG text cells using Node.js.
+- Defer GSAP/ScrollTrigger, Lenis, Zustand, and shadcn until later sections need them. The static hero itself requires none of these.
 
-## Verification and renderer details
+## Verification
+- Four Playwright tests cover static rendering with no canvas/playback controls, responsive right-side placement, removal of stray glyphs, and repaired neck/beak/forehead gaps.
+- Each implementation slice was preceded by an observed failing test, followed by passing tests.
 - `npm test`, `npm run typecheck`, and `npm run build` pass. Production screenshots inspected at 1440 × 900 and 390 × 844.
-- Shader distortion and shimmer approximate the reference; no video playback or true pose reconstruction is used.
-- SVG remains visible before hydration or if WebGL fails, with an explicit error message on failure.
-- Animation pauses for reduced motion by default, via the visitor control, and while the document is hidden. GPU pixel density is capped at 1.5.
-- Use animation-frame timestamps consistently: mixing them with `performance.now()` caused a negative initial delta during testing.
-
-- Current regression tests verify clear space on the left, a proportional right-aligned canvas, and no overflow on desktop, mobile, or short landscape screens. The layout test was updated to the new requirement and observed red before implementation.
-- User clarified that only the surrounding background pattern should be removed; preserve the bird’s character texture. A hand-traced SVG clip path isolates the head, crest, and neck without changing the original glyph paths. Both the shader texture and static preview use this same edited SVG.
-- Background-removal pixel tests failed on the original asset, then passed with the isolated silhouette. All four browser tests, TypeScript checking, and production build pass; desktop and mobile screenshots inspected.

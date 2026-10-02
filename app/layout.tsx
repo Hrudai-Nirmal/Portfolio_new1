@@ -4,7 +4,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Hrudai Nirmal — Portfolio',
-  description: 'An immersive portfolio. Peacock hero background preview.',
+  description: 'An immersive portfolio. Static binary peacock hero preview.',
 };
 
 /** Provide the document shell for the portfolio. */
