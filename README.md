@@ -1,6 +1,6 @@
 # Hrudai Nirmal — portfolio
 
-The first slice is a static, cleaned binary peacock hero background built from the supplied SVG. Hero text, navigation, and subsequent sections are intentionally pending design discussion.
+The first slice pairs demo hero text with the supplied static peacock SVG. Final copy, navigation, and subsequent sections remain pending design discussion.
 
 ## Development
 
@@ -22,7 +22,7 @@ npm run build
 
 ## Artwork
 
-The original supplied SVG is preserved in `assets/peacock-source.svg`. Regenerate the cleaned vector with `node scripts/clean-peacock.mjs`. Mesh gaps are reconstructed from nearby glyph colors while preserving the binary style.
+The latest supplied `ascii-art (1).svg` is copied directly to `public/peacock.svg`, without modifications. The browser test checks its exact SHA-256 hash. Do not run cleanup, reconstruction, or animation on this asset.
 
 ## Deployment
 
