@@ -29,7 +29,7 @@ Build Hrudai Nirmal's portfolio as a dark, immersive, scroll-driven website with
 ## Hero background — first slice
 - Reference: user-provided five-second `peacockvid.mp4`; source artwork: `peacockvector.svg` (844.8 × 1280, 7,040 paths, approximately 1.1 MB).
 - Recreate the dark blue/cyan character-texture shimmer with gentle spatial distortion using the SVG as a WebGL texture. A static SVG cannot reconstruct the changing poses in the video; this is an approximation for review.
-- Per the viewport-fill request, map the complete artwork to 100% viewport width and 100dvh height. This stretches the portrait on wide screens rather than leaving side gutters or cropping it. The static preview uses the same sizing. Hero copy and later sections are outside this slice.
+- The stage remains one viewport high. The peacock now keeps its original 0.66 aspect ratio and sits on the right, leaving the left side clear for future hero copy. On narrow screens it occupies up to 80% of the width and is bottom-aligned. The earlier full-width stretching request was reverted.
 - Use native WebGL to avoid a graphics-library dependency and animating thousands of SVG DOM nodes.
 - Add Next.js, React, and React DOM (MIT) for the agreed application foundation. Next.js is approximately 186 MB unpacked before platform binaries; React approximately 179 KB. These package sizes are installation sizes, not client bundles.
 - TypeScript and Playwright (Apache-2.0), plus MIT type declarations, are development tooling only. Playwright needs a separate browser download for real GPU/browser verification; it is not shipped to visitors.
@@ -42,4 +42,6 @@ Build Hrudai Nirmal's portfolio as a dark, immersive, scroll-driven website with
 - Animation pauses for reduced motion by default, via the visitor control, and while the document is hidden. GPU pixel density is capped at 1.5.
 - Use animation-frame timestamps consistently: mixing them with `performance.now()` caused a negative initial delta during testing.
 
-- Viewport-fill regression test first failed on the empty left gutter, then passed after updating shader UV mapping and CSS. Covers desktop, mobile, and short landscape viewports with no overflow.
+- Current regression tests verify clear space on the left, a proportional right-aligned canvas, and no overflow on desktop, mobile, or short landscape screens. The layout test was updated to the new requirement and observed red before implementation.
+- User clarified that only the surrounding background pattern should be removed; preserve the bird’s character texture. A hand-traced SVG clip path isolates the head, crest, and neck without changing the original glyph paths. Both the shader texture and static preview use this same edited SVG.
+- Background-removal pixel tests failed on the original asset, then passed with the isolated silhouette. All four browser tests, TypeScript checking, and production build pass; desktop and mobile screenshots inspected.

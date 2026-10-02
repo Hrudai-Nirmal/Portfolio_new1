@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="844.8" height="1280" viewBox="0 0 844.8 1280">
   <rect width="100%" height="100%" fill="#000000"/>
-  <g>
+  <!-- Isolate the head, crest, and neck while retaining the original character paths. -->
+  <defs>
+    <clipPath id="peacock-silhouette">
+      <path d="M94 624 L136 584 L208 557 L265 540 L299 497 Q318 460 352 447 Q393 426 447 429 L480 435 L508 422 L543 380 L566 386 L590 413 L638 429 L640 449 L576 453 L535 467 Q544 507 520 556 Q518 597 550 646 Q575 689 588 750 Q636 874 652 1010 L695 1280 L347 1280 Q380 1187 405 1111 Q431 1002 430 904 Q423 791 405 717 Q394 654 360 606 L316 592 L270 607 L201 611 L147 620 Z"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#peacock-silhouette)">
     <path fill="rgb(16,77,114)" d="M1.28 5.60L7.36 5.60L7.36 6.80L1.28 6.80L1.28 5.60ZM1.28 8.80L7.36 8.80L7.36 10L1.28 10L1.28 8.80Z"/>
     <path fill="rgb(0,61,95)" d="M10.88 5.60L16.96 5.60L16.96 6.80L10.88 6.80L10.88 5.60ZM10.88 8.80L16.96 8.80L16.96 10L10.88 10L10.88 8.80Z"/>
     <path fill="rgb(0,33,60)" d="M20.91 7.20L26.11 7.20L26.11 8.40L20.91 8.40L20.91 7.20Z"/>

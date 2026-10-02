@@ -13,7 +13,7 @@ uniform sampler2D uArtwork;
 uniform float uTime;
 varying vec2 vUv;
 void main() {
-  // Map the entire SVG to the viewport so the portrait leaves no side gutters.
+  // The canvas keeps the source aspect ratio; map the full portrait without stretching.
   vec2 uv = vec2(vUv.x, 1.0 - vUv.y);
   float headMask = exp(-pow((uv.y - 0.38) * 6.0, 2.0));
   uv.x += sin(uTime * 0.85 + uv.y * 9.0) * 0.012 * headMask;

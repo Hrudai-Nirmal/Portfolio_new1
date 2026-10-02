@@ -33,13 +33,13 @@ test('respects reduced motion and fits a mobile viewport', async ({ page }) => {
   } catch (error) { throw new Error('Reduced-motion mobile verification failed', { cause: error }); }
 });
 
-test('fills one viewport with artwork across the width and no page overflow', async ({ page }) => {
+test('keeps the peacock proportional on the right with clear space for hero copy', async ({ page }) => {
   try {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/');
     const canvas = page.locator('canvas');
     await expect(canvas).toHaveAttribute('data-render-state', 'ready');
-    const screenshot = await canvas.screenshot({ mask: [page.locator('nextjs-portal')] });
+    const screenshot = await page.locator('.peacock-stage').screenshot({ mask: [page.locator('nextjs-portal')] });
     const hasArtworkAtLeft = await page.evaluate(async (imageBase64) => {
       try {
         const image = new Image();
@@ -55,7 +55,11 @@ test('fills one viewport with artwork across the width and no page overflow', as
         return pixels.some((channel, index) => index % 4 !== 3 && channel > 10);
       } catch (error) { throw new Error('Could not sample the artwork edge', { cause: error }); }
     }, screenshot.toString('base64'));
-    expect(hasArtworkAtLeft).toBe(true);
+    expect(hasArtworkAtLeft).toBe(false);
+    const artworkBounds = await canvas.boundingBox();
+    expect(artworkBounds).not.toBeNull();
+    expect(artworkBounds!.x).toBeGreaterThan(720);
+    expect(artworkBounds!.width / artworkBounds!.height).toBeCloseTo(0.66, 2);
     for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }, { width: 800, height: 280 }]) {
       await page.setViewportSize(viewport);
       await expect(page.locator('.peacock-stage')).toHaveCSS('height', `${viewport.height}px`);
@@ -63,5 +67,35 @@ test('fills one viewport with artwork across the width and no page overflow', as
       expect(dimensions).toEqual(viewport);
     }
     await expect(page.locator('.peacock-artwork')).toHaveCSS('background-size', '100% 100%');
-  } catch (error) { throw new Error('Viewport fill verification failed', { cause: error }); }
+  } catch (error) { throw new Error('Right-aligned artwork verification failed', { cause: error }); }
+});
+
+test('removes surrounding mesh from the source artwork while retaining the bird', async ({ page }) => {
+  try {
+    await page.goto('/');
+    const samples = await page.evaluate(async () => {
+      try {
+        const artwork = new Image();
+        artwork.src = '/peacock.svg';
+        await artwork.decode();
+        const canvas = document.createElement('canvas');
+        canvas.width = 845;
+        canvas.height = 1280;
+        const context = canvas.getContext('2d');
+        if (!context) throw new Error('Artwork sampling requires a 2D context.');
+        context.drawImage(artwork, 0, 0);
+        function hasVisiblePixels(left: number, top: number, width: number, height: number) {
+          return context!.getImageData(left, top, width, height).data.some((value, index) => index % 4 !== 3 && value > 10);
+        }
+        return {
+          upperBackground: hasVisiblePixels(0, 0, 845, 300),
+          leftBackground: hasVisiblePixels(0, 700, 250, 500),
+          rightBackground: hasVisiblePixels(730, 350, 110, 850),
+          head: hasVisiblePixels(280, 430, 250, 160),
+          neck: hasVisiblePixels(440, 800, 160, 400),
+        };
+      } catch (error) { throw new Error('Could not inspect the source artwork', { cause: error }); }
+    });
+    expect(samples).toEqual({ upperBackground: false, leftBackground: false, rightBackground: false, head: true, neck: true });
+  } catch (error) { throw new Error('Background removal verification failed', { cause: error }); }
 });

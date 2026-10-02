@@ -3,7 +3,7 @@
 * { box-sizing: border-box; }
 body { margin: 0; }
 .peacock-stage { position: relative; width: 100%; height: 100dvh; overflow: hidden; background: #000; }
-.peacock-artwork, .peacock-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.peacock-artwork, .peacock-stage canvas { position: absolute; right: 4%; bottom: 0; width: min(66dvh, 55vw); height: min(100dvh, 83.333333vw); }
 .peacock-artwork { background: #000 url('/peacock.svg') center / 100% 100% no-repeat; }
 .peacock-stage canvas { opacity: 0; }
 .peacock-stage canvas.is-ready { opacity: 1; }
@@ -11,3 +11,8 @@ body { margin: 0; }
 .motion-control:hover { background: #14252c; }
 .motion-control:focus-visible { outline: 2px solid #8cdae6; outline-offset: 5px; }
 .animation-error { position: absolute; bottom: 24px; left: 24px; right: 24px; color: #b8cdd1; font-size: 12px; }
+
+/* Keep a readable silhouette without letting the portrait stretch on narrow screens. */
+@media (max-width: 640px) {
+  .peacock-artwork, .peacock-stage canvas { right: 0; width: min(66dvh, 80vw); height: min(100dvh, 121.212121vw); }
+}
