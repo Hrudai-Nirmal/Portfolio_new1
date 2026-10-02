@@ -11,12 +11,10 @@ const FRAGMENT_SHADER = `
 precision mediump float;
 uniform sampler2D uArtwork;
 uniform float uTime;
-uniform float uAspect;
 varying vec2 vUv;
 void main() {
-  // Keep the portrait's proportions and blend its edges into the black stage.
-  vec2 uv = vec2((vUv.x - 0.5) * (uAspect / 0.66) + 0.5, 1.0 - vUv.y);
-  if (uv.x < 0.0 || uv.x > 1.0) { gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0); return; }
+  // Map the entire SVG to the viewport so the portrait leaves no side gutters.
+  vec2 uv = vec2(vUv.x, 1.0 - vUv.y);
   float headMask = exp(-pow((uv.y - 0.38) * 6.0, 2.0));
   uv.x += sin(uTime * 0.85 + uv.y * 9.0) * 0.012 * headMask;
   uv.y += sin(uTime * 0.65 + uv.x * 7.0) * 0.003 * headMask;
@@ -72,7 +70,6 @@ export function createPeacockRenderer(canvas: HTMLCanvasElement, artwork: HTMLIm
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, artwork);
     gl.uniform1i(gl.getUniformLocation(program, 'uArtwork'), 0);
     const timeUniform = gl.getUniformLocation(program, 'uTime');
-    const aspectUniform = gl.getUniformLocation(program, 'uAspect');
 
     return {
       /** Draw at a bounded pixel density to keep mobile GPU work reasonable. */
@@ -87,7 +84,6 @@ export function createPeacockRenderer(canvas: HTMLCanvasElement, artwork: HTMLIm
         }
         gl.viewport(0, 0, width, height);
         gl.uniform1f(timeUniform, elapsedSeconds);
-        gl.uniform1f(aspectUniform, width / height);
         gl.drawArrays(gl.TRIANGLES, 0, 6);
       },
       /** Release resources on unmount, including React development remounts. */

@@ -2,9 +2,9 @@
 :root { color-scheme: dark; background: #000; color: #d6e6e9; font-family: Arial, Helvetica, sans-serif; }
 * { box-sizing: border-box; }
 body { margin: 0; }
-.peacock-stage { position: relative; width: 100%; height: 100svh; min-height: 320px; overflow: hidden; background: #000; }
+.peacock-stage { position: relative; width: 100%; height: 100dvh; overflow: hidden; background: #000; }
 .peacock-artwork, .peacock-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-.peacock-artwork { background: #000 url('/peacock.svg') center / auto 100% no-repeat; }
+.peacock-artwork { background: #000 url('/peacock.svg') center / 100% 100% no-repeat; }
 .peacock-stage canvas { opacity: 0; }
 .peacock-stage canvas.is-ready { opacity: 1; }
 .motion-control { position: absolute; right: max(24px, env(safe-area-inset-right)); bottom: max(24px, env(safe-area-inset-bottom)); display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 10px 17px; border: 1px solid #354247; border-radius: 999px; background: #081014d9; color: #d6e6e9; font: inherit; font-size: 12px; letter-spacing: .06em; cursor: pointer; }
