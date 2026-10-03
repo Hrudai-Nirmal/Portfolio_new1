@@ -1,6 +1,6 @@
 import { ForestHero } from '../components/forest-hero';
 
-/** Keep the first deliverable limited to the hero for visual review. */
+/** Show the forest hero and a placeholder section for reviewing its scroll transition. */
 export default function HomePage() {
   return <main><ForestHero /></main>;
 }

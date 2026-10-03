@@ -1,6 +1,6 @@
 # Hrudai Nirmal — portfolio
 
-The current hero is a responsive forest-frame draft built from six standalone SVG foliage assets around centered demo copy. Scroll animation and subsequent sections remain pending visual review.
+The hero places demo copy on the left and the original peacock on the right, framed by dense realistic foliage. Scrolling slides the four foliage layers clockwise offscreen before reaching a placeholder second section.
 
 ## Development
 
@@ -22,9 +22,11 @@ npm run build
 
 ## Artwork
 
-The original foliage assets live in `public/foliage`. They contain real vector paths, gradients, filters, and shapes with no embedded raster images or third-party material.
+Realistic foliage uses two AI-generated transparent WebP assets in `public/foliage`, reused across twelve placements. PNG masters and generation prompts are kept in `assets/foliage`. Earlier SVG drafts remain available for reference.
 
-The latest supplied `ascii-art (3).svg` remains preserved in `public/peacock.svg`, but the forest draft does not render it. The isolated 60-glyph Gemini watermark was removed from the bottom right; every other SVG line remains unchanged.
+The supplied `ascii-art (3).svg` is rendered from `public/peacock.svg`. The isolated 60-glyph Gemini watermark was removed from the bottom right; every other SVG line remains unchanged and is protected by a hash test.
+
+GSAP ScrollTrigger controls the clockwise exit and its reverse. Reduced-motion visitors receive normal document scrolling with static foliage.
 
 ## Deployment
 
