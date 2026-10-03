@@ -1,6 +1,6 @@
 # Hrudai Nirmal — portfolio
 
-The first slice pairs demo hero text with the supplied static peacock SVG. Final copy, navigation, and subsequent sections remain pending design discussion.
+The first slice pairs demo hero text and a centered glass header with the supplied static peacock SVG over an interactive AeroShards WebGPU background. Final copy and subsequent sections remain pending design discussion.
 
 ## Development
 

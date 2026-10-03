@@ -21,7 +21,9 @@ Build Hrudai Nirmal's portfolio as a dark, immersive, scroll-driven website with
 - Maintain this file as project behavior and decisions evolve.
 
 ## Current state
-- The home route has demo hero text on the left and the supplied static binary peacock on the right. On mobile, copy sits above the bottom-aligned artwork. Navigation and later sections remain pending.
+- The home route has demo hero text on the left and the supplied static binary peacock on the right. On mobile, copy sits above the bottom-aligned artwork. The peacock uses `mix-blend-mode: screen` so its black SVG background reveals the animated layer beneath without modifying the asset.
+- A centered floating glass header provides demo Home, Work, About, and Contact navigation. Desktop shows the full navigation; mobile keeps the brand and Contact action.
+- The full hero background uses the official React Bits `AeroShards-TS-CSS` component with the exact colors, flow, material, detail, interaction, density, and effect values supplied by the user. It runs behind the peacock and copy.
 - Demo copy: Hrudai Nirmal; “Ideas into experiences.”; “A space for thoughtful design, expressive interfaces, and the curiosity that connects them.”; “Design. Code. Curiosity.” This is placeholder copy, not approved final portfolio content.
 - The current source is `ascii-art (3).svg` (1358.4 × 2048). `public/peacock.svg` preserves its original markup except for the explicitly requested Gemini watermark removal; do not clean, reconstruct, filter, or animate the peacock artwork.
 - Source SHA-256: `03bd595be76e21cdae112826834fc74b05a913b7f0e437db2d140f06618a0a3d`. Served asset SHA-256: `d483773b1ba23adc487222bd6969970e49b647479e01a2e42c0babe0a5d4b655`.
@@ -31,11 +33,12 @@ Build Hrudai Nirmal's portfolio as a dark, immersive, scroll-driven website with
 
 ## Dependencies and decisions
 - Next.js, React, and React DOM (MIT) provide the agreed application foundation. Next.js was approximately 186 MB unpacked before platform binaries at installation; React approximately 179 KB. These are installation sizes, not client bundles.
+- `vgpu@0.3.1` (MIT; approximately 6.2 MB unpacked before transitive packages) is required by the official AeroShards WebGPU renderer. The renderer is loaded in a separate browser-only dynamic chunk so the header, copy, and peacock can render without waiting for GPU code.
 - TypeScript and Playwright (Apache-2.0), plus MIT type declarations, are development tooling only. Playwright's separate browser download is not shipped to visitors.
 - No image processing dependency is used. The one-time watermark edit removed its isolated SVG text elements without changing the peacock.
-- Defer GSAP/ScrollTrigger, Lenis, Zustand, and shadcn until later sections need them. The static hero itself requires none of these.
+- Defer GSAP/ScrollTrigger, Lenis, Zustand, and shadcn UI primitives until later sections need them. AeroShards was installed from a shadcn-compatible React Bits registry item, but the header itself uses project CSS.
 
 ## Verification
-- Four Playwright tests cover static rendering, responsive artwork placement, the expected watermark-free SVG hash and empty watermark coordinates, and readable demo copy beside/above the artwork.
+- Five Playwright tests cover the AeroShards canvas and layer order, centered glass navigation, responsive artwork placement, the expected watermark-free SVG hash and empty watermark coordinates, and readable demo copy beside/above the artwork.
 - Each implementation slice was preceded by an observed failing test, followed by passing tests.
-- `npm test`, `npm run typecheck`, and `npm run build` pass. Production screenshots inspected at 1440 × 900 and 390 × 844.
+- `npm test`, `npm run typecheck`, and `npm run build` pass. The live in-app browser reports AeroShards ready with a populated WebGPU canvas; desktop and mobile layouts were visually inspected.

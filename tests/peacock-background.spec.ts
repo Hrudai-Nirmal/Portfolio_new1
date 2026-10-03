@@ -2,17 +2,51 @@
 import { createHash } from 'node:crypto';
 import { expect, test } from '@playwright/test';
 
-test('shows static peacock artwork without animation or playback controls', async ({ page }) => {
+test('shows the static peacock above the animated AeroShards background', async ({ page }) => {
   try {
+    const browserErrors: string[] = [];
+    page.on('pageerror', (error) => browserErrors.push(error.message));
     await page.goto('/');
     const artwork = page.locator('img.peacock-artwork');
     await expect(artwork).toBeVisible();
+    await expect(artwork).toHaveAttribute('loading', 'eager');
     expect(await artwork.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
-    await expect(page.locator('canvas')).toHaveCount(0);
+    await expect(page.locator('.aero-shards canvas')).toHaveCount(1);
+    await expect(page.locator('.aero-shards')).toHaveCSS('background-color', 'rgb(18, 15, 23)');
     await expect(page.getByRole('button', { name: /animation/i })).toHaveCount(0);
     const firstFrame = await artwork.screenshot();
     expect((await artwork.screenshot()).equals(firstFrame)).toBe(true);
+    const layers = await page.evaluate(() => ({
+      background: Number(getComputedStyle(document.querySelector('.hero-background')!).zIndex),
+      peacock: Number(getComputedStyle(document.querySelector('.peacock-artwork')!).zIndex),
+      copy: Number(getComputedStyle(document.querySelector('.hero-copy')!).zIndex),
+    }));
+    expect(layers.background).toBeLessThan(layers.peacock);
+    expect(layers.peacock).toBeLessThan(layers.copy);
+    await page.mouse.move(1200, 450);
+    expect(browserErrors).toEqual([]);
   } catch (error) { throw new Error('Static artwork verification failed', { cause: error }); }
+});
+
+test('centers a glass navigation header above the hero', async ({ page }) => {
+  try {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+    const header = page.getByRole('banner');
+    await expect(header).toBeVisible();
+    await expect(page.getByRole('navigation', { name: 'Primary navigation' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Hrudai Nirmal' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Contact' })).toBeVisible();
+    const desktopBounds = await header.boundingBox();
+    expect(Math.abs(desktopBounds!.x + desktopBounds!.width / 2 - 720)).toBeLessThan(2);
+    expect(await header.evaluate((element) => getComputedStyle(element).backdropFilter)).toContain('blur');
+    await page.setViewportSize({ width: 390, height: 844 });
+    const mobileBounds = await header.boundingBox();
+    expect(mobileBounds!.x).toBeGreaterThanOrEqual(12);
+    expect(mobileBounds!.x + mobileBounds!.width).toBeLessThanOrEqual(378);
+    const mobileCopyBounds = await page.locator('.hero-copy').boundingBox();
+    expect(mobileCopyBounds!.y - (mobileBounds!.y + mobileBounds!.height)).toBeGreaterThanOrEqual(16);
+  } catch (error) { throw new Error('Glass header verification failed', { cause: error }); }
 });
 
 test('keeps natural proportions on the right and fits desktop and mobile screens', async ({ page }) => {

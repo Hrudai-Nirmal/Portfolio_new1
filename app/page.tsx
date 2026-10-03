@@ -1,6 +1,12 @@
 import { PeacockBackground } from '../components/peacock-background';
+import { SiteHeader } from '../components/site-header';
 
-/** Keep the first deliverable limited to the hero background for visual review. */
+/** Compose the portfolio hero and its persistent primary navigation. */
 export default function HomePage() {
-  return <main><PeacockBackground /></main>;
+  return (
+    <>
+      <SiteHeader />
+      <main><PeacockBackground /></main>
+    </>
+  );
 }
