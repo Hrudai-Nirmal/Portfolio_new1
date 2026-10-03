@@ -9,6 +9,15 @@ body { overflow-x: clip; }
 .peacock-artwork { position: absolute; z-index: 1; bottom: 3%; right: 10%; width: min(58dvh, 43vw); height: auto; mix-blend-mode: screen; }
 .forest-frame { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
 .forest-edge { position: absolute; inset: 0; will-change: transform, opacity; }
+.forest-back-leaves { z-index: 0; }
+.forest-mid-vine { z-index: 1; }
+.forest-front-leaves { z-index: 2; }
+.forest-breeze { position: absolute; inset: 0; transform-origin: center; }
+.woody-vine { position: absolute; height: auto; max-width: none; filter: brightness(.78) saturate(.72) drop-shadow(0 5px 7px #0009); }
+.forest-edge-top .woody-vine { width: 112%; left: -6%; top: -9vw; }
+.forest-edge-bottom .woody-vine { width: 112%; right: -6%; bottom: -9vw; transform: rotate(180deg); }
+.forest-edge-left .woody-vine { width: 116dvh; left: 4%; top: 50%; transform: translate(-50%, -50%) rotate(-90deg); }
+.forest-edge-right .woody-vine { width: 116dvh; right: 4%; top: 50%; transform: translate(50%, -50%) rotate(90deg); }
 .edge-vine, .edge-fern { position: absolute; height: auto; display: block; max-width: none; filter: brightness(.67) saturate(.72) drop-shadow(0 12px 18px #0008); }
 .forest-edge-top .edge-vine { width: 112%; left: -4%; top: -17vw; }
 .forest-edge-bottom .edge-vine { width: 112%; right: -4%; bottom: -16vw; transform: rotate(180deg); }
@@ -54,6 +63,10 @@ body { overflow-x: clip; }
   .forest-edge-left .edge-fern-near { top: -7%; left: -42%; }
   .forest-edge-right .edge-fern-near { right: -46%; bottom: -4%; }
   .edge-fern-far { display: none; }
+  .forest-edge-top .woody-vine { width: 175%; left: -38%; top: -14vw; }
+  .forest-edge-bottom .woody-vine { width: 175%; right: -38%; bottom: -14vw; }
+  .forest-edge-left .woody-vine { left: -4%; }
+  .forest-edge-right .woody-vine { right: -4%; }
   .scroll-cue { left: 16%; bottom: 7%; font-size: 8px; }
   .next-section { padding: 90px 10%; }
 }

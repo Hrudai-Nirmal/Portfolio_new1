@@ -1,6 +1,6 @@
 # Hrudai Nirmal — portfolio
 
-The hero places demo copy on the left and the original peacock on the right, framed by dense realistic foliage. Scrolling slides the four foliage layers clockwise offscreen before reaching a placeholder second section.
+The hero places demo copy on the left and the original peacock on the right, framed by dense realistic foliage. Scrolling slides woody vines clockwise while surrounding greenery retreats outward. A placeholder second section follows.
 
 ## Development
 
@@ -22,11 +22,11 @@ npm run build
 
 ## Artwork
 
-Realistic foliage uses two AI-generated transparent WebP assets in `public/foliage`, reused across twelve placements. PNG masters and generation prompts are kept in `assets/foliage`. Earlier SVG drafts remain available for reference.
+Realistic foliage uses three AI-generated transparent WebP assets in `public/foliage`, reused across sixteen placements. PNG masters and generation prompts are kept in `assets/foliage`. Earlier SVG drafts remain available for reference.
 
 The supplied `ascii-art (3).svg` is rendered from `public/peacock.svg`. The isolated 60-glyph Gemini watermark was removed from the bottom right; every other SVG line remains unchanged and is protected by a hash test.
 
-GSAP ScrollTrigger controls the clockwise exit and its reverse. Reduced-motion visitors receive normal document scrolling with static foliage.
+GSAP ScrollTrigger controls independent vine and foliage exits and their reverse. Foreground ferns sway gently at rest and pause offscreen. Reduced-motion visitors receive normal document scrolling with static foliage.
 
 ## Deployment
 

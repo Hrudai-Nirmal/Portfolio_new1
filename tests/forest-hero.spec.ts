@@ -11,7 +11,7 @@ test('shows the original peacock right of the copy with loaded realistic foliage
     const copyBounds = await page.locator('.hero-copy').boundingBox();
     const artworkBounds = await artwork.boundingBox();
     expect(copyBounds!.x + copyBounds!.width).toBeLessThan(artworkBounds!.x);
-    await expect(page.locator('.forest-frame img')).toHaveCount(12);
+    await expect(page.locator('.forest-frame img')).toHaveCount(16);
     await expect.poll(() => page.locator('.forest-frame img').evaluateAll((images) =>
       images.every((image) => (image as HTMLImageElement).complete && (image as HTMLImageElement).naturalWidth > 0)
     )).toBe(true);
@@ -20,16 +20,25 @@ test('shows the original peacock right of the copy with loaded realistic foliage
   } catch (error) { throw new Error('Restored forest composition failed', { cause: error }); }
 });
 
-test('slides all four edges clockwise, reveals section two, and reverses on return', async ({ page }) => {
+test('slides vines clockwise and foliage outward, then reverses both on return', async ({ page }) => {
   try {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/');
     await expect(page.locator('.forest-scroll')).toHaveAttribute('data-animation-ready', 'true');
     await page.evaluate(() => window.scrollTo(0, 650));
     for (const [edge, axis, sign] of [['top', 'm41', 1], ['right', 'm42', 1], ['bottom', 'm41', -1], ['left', 'm42', -1]] as const) {
-      await expect.poll(() => page.locator(`[data-edge="${edge}"]`).evaluate((element, coordinates) =>
+      await expect.poll(() => page.locator(`[data-motion="vine"][data-edge="${edge}"]`).evaluate((element, coordinates) =>
         new DOMMatrix(getComputedStyle(element).transform)[coordinates.axis] * coordinates.sign, { axis, sign }
       )).toBeGreaterThan(150);
+    }
+    for (const [edge, axis, crossAxis, sign] of [['top', 'm42', 'm41', -1], ['right', 'm41', 'm42', 1], ['bottom', 'm42', 'm41', 1], ['left', 'm41', 'm42', -1]] as const) {
+      const foliage = page.locator(`[data-motion="foliage"][data-edge="${edge}"]`);
+      await expect.poll(() => foliage.evaluateAll((elements, coordinates) =>
+        elements.every((element) => {
+          const matrix = new DOMMatrix(getComputedStyle(element).transform);
+          return matrix[coordinates.axis] * coordinates.sign > 150 && Math.abs(matrix[coordinates.crossAxis]) < 1;
+        }), { axis, crossAxis, sign }
+      )).toBe(true);
     }
     await page.evaluate(() => window.scrollTo(0, 1150));
     await expect.poll(() => page.locator('.forest-frame').evaluate((frame) =>
@@ -38,10 +47,10 @@ test('slides all four edges clockwise, reveals section two, and reverses on retu
     await page.locator('#next-section').scrollIntoViewIfNeeded();
     await expect(page.getByRole('heading', { name: 'The next chapter.' })).toBeInViewport();
     await page.evaluate(() => window.scrollTo(0, 0));
-    await expect.poll(() => page.locator('[data-edge="top"]').evaluate((element) =>
+    await expect.poll(() => page.locator('[data-motion="vine"][data-edge="top"]').evaluate((element) =>
       Math.abs(new DOMMatrix(getComputedStyle(element).transform).m41)
     )).toBeLessThan(2);
-    await expect(page.locator('[data-edge="top"]')).toHaveCSS('opacity', '1');
+    await expect(page.locator('[data-motion="vine"][data-edge="top"]')).toHaveCSS('opacity', '1');
   } catch (error) { throw new Error('Clockwise scroll transition failed', { cause: error }); }
 });
 
@@ -65,6 +74,22 @@ test('respects reduced motion while keeping both sections accessible', async ({ 
     await expect(page.locator('.forest-scroll')).toHaveCSS('height', '720px');
     await page.getByRole('link', { name: 'Scroll to explore' }).click();
     await expect(page.getByRole('heading', { name: 'The next chapter.' })).toBeInViewport();
-    await expect(page.locator('[data-edge="top"]')).toHaveCSS('transform', 'none');
+    await expect(page.locator('[data-motion="vine"][data-edge="top"]')).toHaveCSS('transform', 'none');
+    await expect(page.locator('.forest-breeze').first()).toHaveCSS('transform', 'none');
   } catch (error) { throw new Error('Reduced motion forest failed', { cause: error }); }
+});
+
+test('gently sways foliage at rest and pauses the breeze outside the hero', async ({ page }) => {
+  try {
+    await page.goto('/');
+    const breeze = page.locator('.forest-breeze').first();
+    await expect(breeze).toBeAttached();
+    const initialTransform = await breeze.evaluate((element) => getComputedStyle(element).transform);
+    await expect.poll(() => breeze.evaluate((element) => getComputedStyle(element).transform)).not.toBe(initialTransform);
+    await expect(page.locator('.peacock-artwork')).toHaveCSS('transform', 'none');
+    await page.locator('#next-section').scrollIntoViewIfNeeded();
+    const pausedTransform = await breeze.evaluate((element) => getComputedStyle(element).transform);
+    await page.waitForTimeout(250);
+    expect(await breeze.evaluate((element) => getComputedStyle(element).transform)).toBe(pausedTransform);
+  } catch (error) { throw new Error('Ambient foliage motion failed', { cause: error }); }
 });

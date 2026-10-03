@@ -5,7 +5,7 @@ import { useEffect, useRef, type ReactNode } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-/** Scrub foliage clockwise while preserving the peacock and copy as a stationary composition. */
+/** Separate clockwise vines, outward foliage, and ambient breeze on nested transform layers. */
 export function ForestScroll({ children }: { children: ReactNode }) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -15,6 +15,24 @@ export function ForestScroll({ children }: { children: ReactNode }) {
     gsap.registerPlugin(ScrollTrigger);
     const media = gsap.matchMedia();
     media.add('(prefers-reduced-motion: no-preference)', () => {
+      const breezeTweens = [...scrollElement.querySelectorAll<HTMLElement>('.forest-breeze')].map((cluster, index) =>
+        gsap.to(cluster, {
+          rotation: index % 2 === 0 ? 0.65 : -0.65,
+          y: index % 2 === 0 ? 4 : -4,
+          duration: 5.5 + index * 0.8,
+          ease: 'sine.inOut',
+          repeat: -1,
+          yoyo: true,
+          paused: true,
+        })
+      );
+      // Stop invisible perpetual motion while retaining its phase for a natural return.
+      ScrollTrigger.create({
+        trigger: scrollElement,
+        start: 'top bottom',
+        end: 'bottom top',
+        onToggle: ({ isActive }) => breezeTweens.forEach((tween) => isActive ? tween.play() : tween.pause()),
+      });
       const timeline = gsap.timeline({
         defaults: { ease: 'none' },
         scrollTrigger: {
@@ -25,7 +43,7 @@ export function ForestScroll({ children }: { children: ReactNode }) {
           invalidateOnRefresh: true,
         },
       });
-      // Translate whole edge groups so the rotated images retain their botanical orientation.
+      // Each layer declares its own exit; child breeze transforms cannot override this travel.
       for (const edge of scrollElement.querySelectorAll<HTMLElement>('[data-edge]')) {
         const direction = edge.dataset.exit;
         timeline.to(edge, {

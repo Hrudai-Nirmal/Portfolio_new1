@@ -16,3 +16,11 @@ Production botanical asset for a dark immersive forest website: one isolated lus
 - Fern master: 1254 × 1254 RGBA PNG.
 - Sharp WebP quality 86, preserving alpha and source dimensions.
 - Rotation, lighting, positioning, and mobile cropping are CSS properties. The source images are not flattened into a full-scene background.
+
+## Woody vine addition
+
+Generated with built-in ImageGen as a separate mid-layer; 2172 × 724 transparent PNG, exported to alpha WebP at quality 86. It moves clockwise independently of the original dense foliage assets, which now move outward.
+
+Prompt:
+
+A standalone production cutout asset: one long slender woody jungle vine stretching horizontally across a wide 3:1 canvas, gently undulating, thick rooted end on the right, tapered curling tendril on left. Realistic braided brown green bark, moss in crevices, occasional thin curling tendrils, just 12 small glossy dark emerald leaves spaced along the stem, a few tiny purple buds. The rope-like vine itself must be very visible: 80 percent exposed stem, not buried in leaves. Botanical photography with soft cool side light, fine realistic texture. Entire vine visible, with clear transparent margin above and below and at ends. True transparent background, no scenery, no ground, no text, no frame. This is an independently moving mid-layer woven between existing dense foliage clusters on a dark forest website. Natural organic curved elongated silhouette, not an illustration or plastic.

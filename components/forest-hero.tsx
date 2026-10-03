@@ -1,15 +1,16 @@
 /** Keep artwork and copy server-rendered while the scroll shell animates decorative layers. */
 import Image from 'next/image';
+import { Fragment } from 'react';
 import { ForestScroll } from './forest-scroll';
 
 const EDGE_VINES = [
-  { edge: 'top', flow: 'right-to-left', exit: 'right' },
-  { edge: 'right', flow: 'bottom-to-top', exit: 'down' },
-  { edge: 'bottom', flow: 'left-to-right', exit: 'left' },
-  { edge: 'left', flow: 'top-to-bottom', exit: 'up' },
+  { edge: 'top', flow: 'right-to-left', exit: 'right', outward: 'up' },
+  { edge: 'right', flow: 'bottom-to-top', exit: 'down', outward: 'right' },
+  { edge: 'bottom', flow: 'left-to-right', exit: 'left', outward: 'down' },
+  { edge: 'left', flow: 'top-to-bottom', exit: 'up', outward: 'left' },
 ] as const;
 
-/** Compose the original peacock and copy inside four independent photographic foliage layers. */
+/** Weave moving woody vines between background leaves and gently swaying foreground ferns. */
 export function ForestHero() {
   return (
     <>
@@ -20,15 +21,25 @@ export function ForestHero() {
             alt="Peacock rendered in blue character artwork" loading="eager" fetchPriority="high" unoptimized
             sizes="(max-width: 640px) 60vw, 43vw" />
           <div className="forest-frame" aria-hidden="true">
-            {EDGE_VINES.map(({ edge, flow, exit }) => (
-              <div key={edge} className={`forest-edge forest-edge-${edge}`} data-edge={edge} data-flow={flow} data-exit={exit}>
-                <Image className="edge-vine" src="/foliage/realistic-vine.webp" width={2167} height={726}
-                  sizes="100vw" alt="" loading="eager" unoptimized />
-                <Image className="edge-fern edge-fern-near" src="/foliage/realistic-fern.webp" width={1254} height={1254}
-                  sizes="35vw" alt="" loading="eager" unoptimized />
-                <Image className="edge-fern edge-fern-far" src="/foliage/realistic-fern.webp" width={1254} height={1254}
-                  sizes="25vw" alt="" loading="eager" unoptimized />
-              </div>
+            {EDGE_VINES.map(({ edge, flow, exit, outward }) => (
+              <Fragment key={edge}>
+                <div className={`forest-edge forest-edge-${edge} forest-back-leaves`} data-edge={edge} data-motion="foliage" data-exit={outward}>
+                  <Image className="edge-vine" src="/foliage/realistic-vine.webp" width={2167} height={726}
+                    sizes="100vw" alt="" loading="eager" unoptimized />
+                </div>
+                <div className={`forest-edge forest-edge-${edge} forest-mid-vine`} data-edge={edge} data-flow={flow} data-motion="vine" data-exit={exit}>
+                  <Image className="woody-vine" src="/foliage/woody-vine.webp" width={2172} height={724}
+                    sizes="100vw" alt="" loading="eager" unoptimized />
+                </div>
+                <div className={`forest-edge forest-edge-${edge} forest-front-leaves`} data-edge={edge} data-motion="foliage" data-exit={outward}>
+                  <div className="forest-breeze">
+                    <Image className="edge-fern edge-fern-near" src="/foliage/realistic-fern.webp" width={1254} height={1254}
+                      sizes="35vw" alt="" loading="eager" unoptimized />
+                    <Image className="edge-fern edge-fern-far" src="/foliage/realistic-fern.webp" width={1254} height={1254}
+                      sizes="25vw" alt="" loading="eager" unoptimized />
+                  </div>
+                </div>
+              </Fragment>
             ))}
           </div>
           <div className="hero-copy">

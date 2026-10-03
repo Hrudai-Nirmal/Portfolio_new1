@@ -23,9 +23,10 @@ Build Hrudai Nirmal's portfolio as a dark, immersive, scroll-driven website with
 ## Current state
 - The home route restores the user's unchanged peacock on the right and left-aligned hero copy, surrounded by dense realistic foliage. Narrow screens place the copy above the right-aligned peacock.
 - The discarded AeroShards background and centered glass header have been removed, including their source files and runtime dependency.
-- Two transparent assets generated with built-in ImageGen form twelve foliage placements: a long vine and a fern/flower cluster. Optimized alpha WebP files live in `public/foliage`; PNG masters and prompt provenance live in `assets/foliage`. The previous SVG draft remains available but is not used by the page.
+- Three transparent assets generated with built-in ImageGen form sixteen placements: dense leaf cover, fern/flower clusters, and four exposed woody vines. Optimized alpha WebP files live in `public/foliage`; PNG masters and prompt provenance live in `assets/foliage`. The previous SVG draft remains available but is not used by the page.
 - The vines run anticlockwise at rest: top right-to-left, left top-to-bottom, bottom left-to-right, and right bottom-to-top. Their markup records the intended clockwise exits: right, up, left, and down respectively.
-- GSAP ScrollTrigger scrubs four edge groups clockwise over a 130svh scroll interval. CSS holds the hero sticky; foliage translates offscreen and fades at the end. Scrolling upward reverses the transition. The peacock and copy remain static within the scene.
+- GSAP ScrollTrigger scrubs the four woody vines clockwise over a 130svh interval, reversing anticlockwise on upward scroll. Background leaves and foreground ferns move outward toward their respective edges. Woody vines sit between those two foliage depths. Each layer owns its scroll transform.
+- Foreground fern clusters sway by at most 0.65 degrees and 4 pixels over differing 5.5–7.9 second half-cycles. Nested breeze wrappers prevent ambient transforms from conflicting with scroll transforms. Breeze pauses outside the hero and is disabled with reduced motion.
 - A clearly labeled placeholder second section makes the transition reviewable. Reduced motion removes the sticky interval and animation, allowing ordinary scrolling between the two sections.
 - Demo copy: Hrudai Nirmal; “Ideas into experiences.”; “A space for thoughtful design, expressive interfaces, and the curiosity that connects them.”; “Design. Code. Curiosity.” This is placeholder copy, not approved final portfolio content.
 - The current source is `ascii-art (3).svg` (1358.4 × 2048). `public/peacock.svg` preserves its original markup except for the explicitly requested Gemini watermark removal; do not clean, reconstruct, filter, or animate the peacock artwork.
@@ -38,10 +39,10 @@ Build Hrudai Nirmal's portfolio as a dark, immersive, scroll-driven website with
 - Next.js, React, and React DOM (MIT) provide the agreed application foundation. Next.js was approximately 186 MB unpacked before platform binaries at installation; React approximately 179 KB. These are installation sizes, not client bundles.
 - TypeScript and Playwright (Apache-2.0), plus MIT type declarations, are development tooling only. Playwright's separate browser download is not shipped to visitors.
 - `gsap@3.15.0` provides ScrollTrigger under GSAP's standard no-charge license (https://gsap.com/standard-license/). The package is about 6.3 MB unpacked; only GSAP core and ScrollTrigger are imported. Effects and triggers are scoped and reverted on unmount and media changes.
-- WebP conversion uses the existing transitive Sharp installation from Next.js; no additional image processing dependency was introduced. The two delivered WebP assets total approximately 1.1 MB and are reused from the browser cache.
+- WebP conversion uses the existing transitive Sharp installation from Next.js; no additional image processing dependency was introduced. All placements reuse three cached WebP assets.
 - Defer Lenis, Zustand, and shadcn UI primitives until needed. Native scrolling plus scrub smoothing is sufficient for this slice.
 
 ## Verification
-- Four Playwright tests cover restored composition, loaded foliage, original peacock hash, actual clockwise movement, disappearance and reverse scrolling, second-section visibility, responsive overflow, and reduced-motion behavior.
+- Five Playwright tests cover restored composition, loaded assets, original peacock hash, independent clockwise vine and outward foliage movement, disappearance and reversal, ambient sway and offscreen pause, second-section visibility, responsive overflow, and reduced motion.
 - Each implementation slice was preceded by an observed failing test, followed by passing tests.
 - `npm test`, `npm run typecheck`, and `npm run build` pass.
