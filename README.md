@@ -1,6 +1,6 @@
 # Hrudai Nirmal — portfolio
 
-The first slice pairs demo hero text and a centered glass header with the supplied static peacock SVG over an interactive AeroShards WebGPU background. Final copy and subsequent sections remain pending design discussion.
+The current hero pairs demo text with the supplied static peacock SVG on a neutral dark stage. The forest-edge direction and subsequent sections remain pending visual review.
 
 ## Development
 
@@ -28,4 +28,4 @@ The latest supplied `ascii-art (3).svg` is used in `public/peacock.svg`. The iso
 
 Import this repository in Vercel using its Next.js preset, repository root, and `main` production branch. No environment variables are required. Automatic deployments depend on the GitHub integration being configured in Vercel.
 
-See [context.md](context.md) for working agreements, dependencies, and animation limitations.
+See [context.md](context.md) for working agreements, current decisions, and the proposed forest transition.

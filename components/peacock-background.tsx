@@ -1,14 +1,11 @@
-/** Compose hero content over AeroShards while keeping the peacock itself static. */
+/** Compose demo hero content beside the user's static peacock artwork. */
 
 import Image from 'next/image';
-
-import { HeroBackground } from './hero-background';
 
 /** Display placeholder portfolio copy and the user's exact peacock asset. */
 export function PeacockBackground() {
   return (
-    <section id="home" className="peacock-stage" aria-labelledby="hero-title">
-      <HeroBackground />
+    <section className="peacock-stage" aria-labelledby="hero-title">
       <Image
         className="peacock-artwork"
         src="/peacock.svg"
