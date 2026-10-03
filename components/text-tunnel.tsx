@@ -13,9 +13,9 @@ export function TextTunnel() {
       <div className="tunnel-perspective">
         <div className="tunnel-camera">
           {TUNNEL_WALLS.map(({ side, sentence }) => (
-            <svg key={side} className={`tunnel-wall tunnel-wall-${side}`} viewBox="0 0 14000 1000">
+            <svg key={side} className={`tunnel-wall tunnel-wall-${side}`} viewBox="0 0 14000 1000" preserveAspectRatio="none">
               <text x="0" y="970" textLength="14000" lengthAdjust="spacingAndGlyphs">
-                {sentence.repeat(4)}
+                {sentence.repeat(4).trim()}
               </text>
             </svg>
           ))}

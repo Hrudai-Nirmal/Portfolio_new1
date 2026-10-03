@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Fragment } from 'react';
 import { ForestScroll } from './forest-scroll';
 import { TextTunnel } from './text-tunnel';
+import { PeacockArtwork } from './peacock-artwork';
 
 const EDGE_VINES = [
   { edge: 'top', flow: 'right-to-left', exit: 'right', outward: 'up' },
@@ -20,9 +21,7 @@ export function ForestHero() {
           <div className="forest-atmosphere" aria-hidden="true" />
           <div className="peacock-position">
             <div className="peacock-camera">
-              <Image className="peacock-artwork" src="/peacock.svg" width={1358} height={2048}
-                alt="Peacock rendered in blue character artwork" loading="eager" fetchPriority="high" unoptimized
-                sizes="(max-width: 640px) 60vw, 43vw" />
+              <PeacockArtwork />
               <span className="peacock-eye" aria-hidden="true" />
             </div>
           </div>

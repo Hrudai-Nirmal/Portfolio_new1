@@ -35,9 +35,9 @@ test('fades copy with vines, centers the eye, zooms into a full-height text tunn
       return Math.abs(eyeBounds!.x - 720) + Math.abs(eyeBounds!.y - 450);
     }).toBeLessThan(3);
     await page.evaluate(() => window.scrollTo(0, 2100));
-    await expect.poll(() => page.locator('.peacock-camera').evaluate((camera) =>
-      new DOMMatrix(getComputedStyle(camera).transform).a
-    )).toBeGreaterThan(15);
+    await expect.poll(() => page.locator('.peacock-artwork').evaluate((artwork) =>
+      (artwork as SVGSVGElement).viewBox.baseVal.width
+    )).toBeLessThan(100);
     await page.evaluate(() => window.scrollTo(0, 3100));
     await expect(page.locator('.text-tunnel')).toHaveCSS('opacity', '1');
     await expect(page.locator('.peacock-position')).toHaveCSS('opacity', '0');
@@ -53,9 +53,7 @@ test('fades copy with vines, centers the eye, zooms into a full-height text tunn
     await page.mouse.wheel(0, -10000);
     await expect(page.locator('.hero-copy')).toHaveCSS('opacity', '1');
     await expect(page.locator('.text-tunnel')).toHaveCSS('opacity', '0');
-    await expect.poll(() => page.locator('.peacock-camera').evaluate((camera) =>
-      new DOMMatrix(getComputedStyle(camera).transform).a
-    )).toBeLessThan(1.01);
+    await expect(page.locator('.peacock-artwork')).toHaveAttribute('viewBox', '0 0 1358.4 2048');
     expect(browserErrors).toEqual([]);
   } catch (error) { throw new Error('Eye to text tunnel journey failed', { cause: error }); }
 });

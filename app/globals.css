@@ -8,8 +8,9 @@ body { overflow-x: clip; }
 .forest-atmosphere { position: absolute; inset: 0; background: #000; }
 /* Coordinates mark the pupil in the original 1358.4 × 2048 SVG. Nested transforms keep it fixed during zoom. */
 .peacock-position { --eye-x: 46.5%; --eye-y: 39.8%; position: absolute; z-index: 1; top: 50%; right: 10%; width: min(58dvh, 43vw); translate: 0 -39.8%; }
-.peacock-camera { position: relative; width: 100%; transform-origin: var(--eye-x) var(--eye-y); will-change: transform; }
-.peacock-artwork { display: block; width: 100%; height: auto; }
+.peacock-camera { position: relative; width: 100%; }
+.peacock-artwork { display: block; width: 100%; height: auto; overflow: visible; }
+.peacock-artwork text { font-family: monospace; font-size: 8px; }
 .peacock-eye { position: absolute; left: var(--eye-x); top: var(--eye-y); width: 0; height: 0; }
 .text-tunnel { position: absolute; z-index: 2; inset: 0; overflow: hidden; opacity: 0; visibility: hidden; background: #000; transform-origin: center; }
 .tunnel-perspective { position: absolute; inset: 0; perspective: 650px; perspective-origin: 50% 50%; }
