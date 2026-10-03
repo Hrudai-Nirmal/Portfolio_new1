@@ -23,18 +23,19 @@ Build Hrudai Nirmal's portfolio as a dark, immersive, scroll-driven website with
 ## Current state
 - The home route has demo hero text on the left and the supplied static binary peacock on the right. On mobile, copy sits above the bottom-aligned artwork. Navigation and later sections remain pending.
 - Demo copy: Hrudai Nirmal; “Ideas into experiences.”; “A space for thoughtful design, expressive interfaces, and the curiosity that connects them.”; “Design. Code. Curiosity.” This is placeholder copy, not approved final portfolio content.
-- User explicitly requested the latest `ascii-art (1).svg` be used directly without any edits. `public/peacock.svg` is a byte-for-byte copy, including its original style/font declarations and black background. Do not clean, reconstruct, filter, or animate it.
-- Source dimensions: 849.6 × 1280. SHA-256: `5de91a383f54dc2b835d18f619936832f0ae3f299ba0994375aeeb06e07f585c`.
+- The current source is `ascii-art (3).svg` (1358.4 × 2048). `public/peacock.svg` preserves its original markup except for the explicitly requested Gemini watermark removal; do not clean, reconstruct, filter, or animate the peacock artwork.
+- Source SHA-256: `03bd595be76e21cdae112826834fc74b05a913b7f0e437db2d140f06618a0a3d`. Served asset SHA-256: `d483773b1ba23adc487222bd6969970e49b647479e01a2e42c0babe0a5d4b655`.
+- The watermark was an isolated 60-glyph grayscale diamond in the bottom-right rectangle `x=1120–1200`, `y=1818–1890`. Only those 60 complete `<text>` lines were removed; comparison against the supplied file confirms all remaining bytes are unchanged.
 - Removed the earlier repair script and superseded source asset to prevent accidental regeneration. Prior versions remain in Git history.
 - Original proportions and right-side placement remain. The stage is 100dvh; mobile artwork is bottom-aligned and at most 80vw.
 
 ## Dependencies and decisions
 - Next.js, React, and React DOM (MIT) provide the agreed application foundation. Next.js was approximately 186 MB unpacked before platform binaries at installation; React approximately 179 KB. These are installation sizes, not client bundles.
 - TypeScript and Playwright (Apache-2.0), plus MIT type declarations, are development tooling only. Playwright's separate browser download is not shipped to visitors.
-- No image processing dependency or transformation pipeline is used; serve the supplied SVG directly.
+- No image processing dependency is used. The one-time watermark edit removed its isolated SVG text elements without changing the peacock.
 - Defer GSAP/ScrollTrigger, Lenis, Zustand, and shadcn until later sections need them. The static hero itself requires none of these.
 
 ## Verification
-- Four Playwright tests cover static rendering, responsive artwork placement, byte-for-byte preservation of the supplied SVG, and readable demo copy beside/above the artwork.
+- Four Playwright tests cover static rendering, responsive artwork placement, the expected watermark-free SVG hash and empty watermark coordinates, and readable demo copy beside/above the artwork.
 - Each implementation slice was preceded by an observed failing test, followed by passing tests.
 - `npm test`, `npm run typecheck`, and `npm run build` pass. Production screenshots inspected at 1440 × 900 and 390 × 844.

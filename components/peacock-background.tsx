@@ -4,7 +4,7 @@
 export function PeacockBackground() {
   return (
     <section className="peacock-stage" aria-labelledby="hero-title">
-      <img className="peacock-artwork" src="/peacock.svg" width={849.6} height={1280} alt="" fetchPriority="high" />
+      <img className="peacock-artwork" src="/peacock.svg" width={1358.4} height={2048} alt="" fetchPriority="high" />
       <div className="hero-copy">
         <p className="hero-name">Hrudai Nirmal</p>
         <h1 id="hero-title">Ideas into<br /><span>experiences.</span></h1>

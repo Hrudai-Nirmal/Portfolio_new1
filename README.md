@@ -22,7 +22,7 @@ npm run build
 
 ## Artwork
 
-The latest supplied `ascii-art (1).svg` is copied directly to `public/peacock.svg`, without modifications. The browser test checks its exact SHA-256 hash. Do not run cleanup, reconstruction, or animation on this asset.
+The latest supplied `ascii-art (3).svg` is used in `public/peacock.svg`. The isolated 60-glyph Gemini watermark was removed from the bottom right; every other SVG line remains unchanged. A browser test checks the exact watermark-free SHA-256 hash and coordinates. Do not run further cleanup, reconstruction, or animation on this asset.
 
 ## Deployment
 

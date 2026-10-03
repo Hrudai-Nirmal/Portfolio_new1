@@ -23,7 +23,7 @@ test('keeps natural proportions on the right and fits desktop and mobile screens
     await expect(artwork).toBeVisible();
     const bounds = await artwork.boundingBox();
     expect(bounds!.x).toBeGreaterThan(720);
-    expect(bounds!.width / bounds!.height).toBeCloseTo(849.6 / 1280, 2);
+    expect(bounds!.width / bounds!.height).toBeCloseTo(1358.4 / 2048, 2);
     for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }, { width: 800, height: 280 }]) {
       await page.setViewportSize(viewport);
       await expect(page.locator('.peacock-stage')).toHaveCSS('height', `${viewport.height}px`);
@@ -32,13 +32,20 @@ test('keeps natural proportions on the right and fits desktop and mobile screens
   } catch (error) { throw new Error('Responsive artwork verification failed', { cause: error }); }
 });
 
-test('serves the supplied SVG byte-for-byte without cleanup or regeneration', async ({ request }) => {
+test('serves the new SVG with only the bottom-right watermark removed', async ({ request }) => {
   try {
     const response = await request.get('/peacock.svg');
     expect(response.ok()).toBe(true);
     const artwork = await response.body();
-    expect(createHash('sha256').update(artwork).digest('hex')).toBe('5de91a383f54dc2b835d18f619936832f0ae3f299ba0994375aeeb06e07f585c');
-  } catch (error) { throw new Error('Original SVG preservation verification failed', { cause: error }); }
+    expect(createHash('sha256').update(artwork).digest('hex')).toBe('d483773b1ba23adc487222bd6969970e49b647479e01a2e42c0babe0a5d4b655');
+    const source = artwork.toString('utf8');
+    const watermarkGlyphs = [...source.matchAll(/<text x="([^"]+)" y="([^"]+)"/g)].filter((match) => {
+      const horizontal = Number(match[1]);
+      const vertical = Number(match[2]);
+      return horizontal >= 1120 && horizontal <= 1200 && vertical >= 1818 && vertical <= 1890;
+    });
+    expect(watermarkGlyphs).toHaveLength(0);
+  } catch (error) { throw new Error('Watermark removal verification failed', { cause: error }); }
 });
 
 test('places demo hero copy to the left of the artwork and keeps it readable on mobile', async ({ page }) => {
