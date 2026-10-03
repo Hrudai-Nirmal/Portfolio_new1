@@ -1,12 +1,26 @@
-/* A sticky forest scene lets foliage retreat while the original artwork remains stationary. */
-:root { color-scheme: dark; background: #020605; color: #e6eee9; font-family: Arial, Helvetica, sans-serif; }
+/* A sticky stage connects the forest exit, pupil zoom, and perspective text tunnel. */
+:root { color-scheme: dark; background: #000; color: #e6eee9; font-family: Arial, Helvetica, sans-serif; }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
 body { overflow-x: clip; }
-.forest-scroll { height: 230svh; }
-.forest-stage { position: sticky; top: 0; isolation: isolate; height: 100dvh; overflow: hidden; background: #020605; }
-.forest-atmosphere { position: absolute; inset: 0; background: radial-gradient(ellipse at 72% 42%, #0a1b17 0, #030a07 42%, #020504 75%); }
-.peacock-artwork { position: absolute; z-index: 1; bottom: 3%; right: 10%; width: min(58dvh, 43vw); height: auto; mix-blend-mode: screen; }
+.forest-scroll { height: 720svh; }
+.forest-stage { position: sticky; top: 0; isolation: isolate; height: 100dvh; overflow: hidden; background: #000; }
+.forest-atmosphere { position: absolute; inset: 0; background: #000; }
+/* Coordinates mark the pupil in the original 1358.4 × 2048 SVG. Nested transforms keep it fixed during zoom. */
+.peacock-position { --eye-x: 46.5%; --eye-y: 39.8%; position: absolute; z-index: 1; top: 50%; right: 10%; width: min(58dvh, 43vw); translate: 0 -39.8%; }
+.peacock-camera { position: relative; width: 100%; transform-origin: var(--eye-x) var(--eye-y); will-change: transform; }
+.peacock-artwork { display: block; width: 100%; height: auto; }
+.peacock-eye { position: absolute; left: var(--eye-x); top: var(--eye-y); width: 0; height: 0; }
+.text-tunnel { position: absolute; z-index: 2; inset: 0; overflow: hidden; opacity: 0; visibility: hidden; background: #000; transform-origin: center; }
+.tunnel-perspective { position: absolute; inset: 0; perspective: 650px; perspective-origin: 50% 50%; }
+.tunnel-camera { position: absolute; inset: 0; transform-style: preserve-3d; will-change: transform; }
+.tunnel-wall { position: absolute; left: 50%; top: 50%; margin-left: -7000px; margin-top: -500px; width: 14000px; height: 1000px; overflow: hidden; backface-visibility: visible; }
+.tunnel-wall text { fill: currentColor; font-family: Impact, 'Arial Narrow', sans-serif; font-size: 1300px; font-weight: 900; }
+.tunnel-wall-left { color: #b4c8d2; transform: translate3d(-500px, 0, -7000px) rotateY(90deg); }
+.tunnel-wall-right { color: #8aabbf; transform: translate3d(500px, 0, -7000px) rotateY(-90deg); }
+.tunnel-wall-ceiling { color: #6c8494; transform: translate3d(0, -500px, -7000px) rotateX(90deg) rotateZ(90deg); }
+.tunnel-wall-floor { color: #9db0c1; transform: translate3d(0, 500px, -7000px) rotateX(-90deg) rotateZ(-90deg); }
+.tunnel-depth { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at center, #000 0%, #000d 5%, transparent 36%, #0005 100%); }
 .forest-frame { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
 .forest-edge { position: absolute; inset: 0; will-change: transform, opacity; }
 .forest-back-leaves { z-index: 0; }
@@ -52,7 +66,8 @@ body { overflow-x: clip; }
   .hero-copy h1 { font-size: clamp(34px, 10vw, 55px); }
   .hero-description { max-width: 260px; font-size: 12px; line-height: 1.65; margin-top: 18px; }
   .hero-note { display: none; }
-  .peacock-artwork { width: min(34dvh, 60vw); right: 13%; bottom: 5%; }
+  .peacock-position { width: min(34dvh, 60vw); right: 13%; }
+  .tunnel-perspective { perspective: 340px; }
   .forest-edge-top .edge-vine { width: 190%; left: -40%; top: -20vw; }
   .forest-edge-bottom .edge-vine { width: 190%; right: -40%; bottom: -27vw; }
   .forest-edge-left .edge-vine { left: -10%; }
@@ -80,4 +95,5 @@ body { overflow-x: clip; }
   .forest-scroll { height: 100dvh; }
   .forest-stage { position: relative; }
   .forest-edge { will-change: auto; }
+  .peacock-camera { will-change: auto; }
 }

@@ -25,25 +25,28 @@ Build Hrudai Nirmal's portfolio as a dark, immersive, scroll-driven website with
 - The discarded AeroShards background and centered glass header have been removed, including their source files and runtime dependency.
 - Three transparent assets generated with built-in ImageGen form sixteen placements: dense leaf cover, fern/flower clusters, and four exposed woody vines. Optimized alpha WebP files live in `public/foliage`; PNG masters and prompt provenance live in `assets/foliage`. The previous SVG draft remains available but is not used by the page.
 - The vines run anticlockwise at rest: top right-to-left, left top-to-bottom, bottom left-to-right, and right bottom-to-top. Their markup records the intended clockwise exits: right, up, left, and down respectively.
-- GSAP ScrollTrigger scrubs the four woody vines clockwise over a 130svh interval, reversing anticlockwise on upward scroll. Background leaves and foreground ferns move outward toward their respective edges. Woody vines sit between those two foliage depths. Each layer owns its scroll transform.
-- Woody vines are pushed toward the viewport boundary and intentionally partially cropped. Their travel and fade finish within the first 32% of the scroll interval, matching the early visual clearance of the outward-moving leaves rather than lingering around the hero.
+- GSAP ScrollTrigger scrubs the four woody vines clockwise during the opening part of the scroll journey, reversing anticlockwise on upward scroll. Background leaves and foreground ferns move outward toward their respective edges. Woody vines sit between those two foliage depths. Each layer owns its scroll transform.
+- Woody vines are pushed toward the viewport boundary and intentionally partially cropped. Their travel and fade finish alongside the hero copy fade, early in the scroll interval, matching the early visual clearance of the outward-moving leaves rather than lingering around the hero.
 - Foreground fern clusters sway by at most 0.65 degrees and 4 pixels over differing 5.5–7.9 second half-cycles. Nested breeze wrappers prevent ambient transforms from conflicting with scroll transforms. Breeze pauses outside the hero and is disabled with reduced motion.
 - A clearly labeled placeholder second section makes the transition reviewable. Reduced motion removes the sticky interval and animation, allowing ordinary scrolling between the two sections.
 - Demo copy: Hrudai Nirmal; “Ideas into experiences.”; “A space for thoughtful design, expressive interfaces, and the curiosity that connects them.”; “Design. Code. Curiosity.” This is placeholder copy, not approved final portfolio content.
-- The current source is `ascii-art (3).svg` (1358.4 × 2048). `public/peacock.svg` preserves its original markup except for the explicitly requested Gemini watermark removal; do not clean, reconstruct, filter, or animate the peacock artwork.
+- The current source is `ascii-art (3).svg` (1358.4 × 2048). `public/peacock.svg` preserves its original markup except for the explicitly requested Gemini watermark removal; do not clean, reconstruct, or filter the peacock artwork. The current approved transition translates and scales its wrapper around the eye without changing the SVG.
 - Source SHA-256: `03bd595be76e21cdae112826834fc74b05a913b7f0e437db2d140f06618a0a3d`. Served asset SHA-256: `d483773b1ba23adc487222bd6969970e49b647479e01a2e42c0babe0a5d4b655`.
 - The watermark was an isolated 60-glyph grayscale diamond in the bottom-right rectangle `x=1120–1200`, `y=1818–1890`. Only those 60 complete `<text>` lines were removed; comparison against the supplied file confirms all remaining bytes are unchanged.
 - Removed the earlier repair script and superseded source asset to prevent accidental regeneration. Prior versions remain in Git history.
-- The forest stage is 100dvh within a 230svh scroll wrapper. Desktop and mobile use separate crop values; four secondary fern placements are hidden on mobile.
+- The forest stage is 100dvh within a 720svh scroll wrapper. Desktop and mobile use separate crop values; four secondary fern placements are hidden on mobile.
+
+- The green atmospheric gradient has been removed. The peacock eye starts at the viewport’s vertical center (46.5% / 39.8% within its SVG). As foliage exits, copy fades and the eye moves horizontally to center before scaling into a circular tunnel reveal.
+- Four SVG planes form a perspective tunnel. Each wall has one oversized, uninterrupted placeholder sentence loop, with glyphs approximately the full wall height. The camera advances through these planes before the placeholder second section. Scroll progress controls the entire reversible sequence; reduced motion keeps the original static hero and hides the tunnel.
 
 ## Dependencies and decisions
 - Next.js, React, and React DOM (MIT) provide the agreed application foundation. Next.js was approximately 186 MB unpacked before platform binaries at installation; React approximately 179 KB. These are installation sizes, not client bundles.
 - TypeScript and Playwright (Apache-2.0), plus MIT type declarations, are development tooling only. Playwright's separate browser download is not shipped to visitors.
 - `gsap@3.15.0` provides ScrollTrigger under GSAP's standard no-charge license (https://gsap.com/standard-license/). The package is about 6.3 MB unpacked; only GSAP core and ScrollTrigger are imported. Effects and triggers are scoped and reverted on unmount and media changes.
 - WebP conversion uses the existing transitive Sharp installation from Next.js; no additional image processing dependency was introduced. All placements reuse three cached WebP assets.
-- Defer Lenis, Zustand, and shadcn UI primitives until needed. Native scrolling plus scrub smoothing is sufficient for this slice.
+- Lenis 1.3.26 (MIT, approximately 458 KB unpacked) smooths wheel scrolling using the GSAP ticker. It forwards scroll updates to ScrollTrigger and is destroyed on unmount or reduced-motion changes. Zustand and shadcn primitives remain deferred until needed.
 
 ## Verification
-- Five Playwright tests cover restored composition, loaded assets, original peacock hash, independent clockwise vine and outward foliage movement, disappearance and reversal, ambient sway and offscreen pause, second-section visibility, responsive overflow, and reduced motion.
+- Eight Playwright tests cover restored composition, loaded assets, original peacock hash, independent clockwise vine and outward foliage movement, disappearance and reversal, ambient sway and offscreen pause, second-section visibility, responsive overflow, reduced motion, eye alignment and zoom, four full-height text walls, forward tunnel travel, and reverse playback.
 - Each implementation slice was preceded by an observed failing test, followed by passing tests.
 - `npm test`, `npm run typecheck`, and `npm run build` pass.
