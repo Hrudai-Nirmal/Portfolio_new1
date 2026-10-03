@@ -1,0 +1,26 @@
+<!-- Original corner foliage cluster combining broad leaves, ferns, and berry accents. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 620" fill="none">
+  <defs>
+    <linearGradient id="deepLeaf" x1="40" y1="570" x2="470" y2="90" gradientUnits="userSpaceOnUse"><stop stop-color="#0B251A"/><stop offset=".48" stop-color="#28563A"/><stop offset="1" stop-color="#6F9061"/></linearGradient>
+    <linearGradient id="brightLeaf" x1="110" y1="560" x2="570" y2="180" gradientUnits="userSpaceOnUse"><stop stop-color="#163525"/><stop offset=".5" stop-color="#46704B"/><stop offset="1" stop-color="#94A66C"/></linearGradient>
+    <linearGradient id="fern" x1="0" y1="620" x2="460" y2="20" gradientUnits="userSpaceOnUse"><stop stop-color="#102C20"/><stop offset=".5" stop-color="#376246"/><stop offset="1" stop-color="#79906A"/></linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="170%" height="170%"><feGaussianBlur in="SourceAlpha" stdDeviation="10"/><feOffset dx="8" dy="12"/><feColorMatrix values="0 0 0 0 0 0 0 0 0 0.035 0 0 0 0 0.02 0 0 0 .8 0"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <mask id="cutouts"><rect width="620" height="620" fill="white"/><ellipse cx="379" cy="246" rx="18" ry="40" transform="rotate(-35 379 246)" fill="black"/><ellipse cx="436" cy="308" rx="18" ry="42" transform="rotate(-55 436 308)" fill="black"/><ellipse cx="325" cy="207" rx="15" ry="36" transform="rotate(-18 325 207)" fill="black"/></mask>
+    <g id="fernlet"><path d="M0 0C22-28 53-30 70-11C48 4 24 9 0 0Z" fill="url(#fern)"/><path d="M6-2C28-7 47-10 62-13" stroke="#C2C99A" stroke-opacity=".2" stroke-width="2"/></g>
+    <g id="berry"><circle cx="0" cy="0" r="8" fill="#8F65A8"/><circle cx="-2" cy="-2" r="3" fill="#D8BCE1" fill-opacity=".55"/></g>
+  </defs>
+  <g filter="url(#shadow)">
+    <path d="M-22 627C98 470 225 371 386 289C467 248 535 183 608 66" stroke="#142F21" stroke-width="15" stroke-linecap="round"/>
+    <path d="M5 620C125 456 244 370 399 296" stroke="#5C7049" stroke-opacity=".45" stroke-width="4" stroke-linecap="round"/>
+    <path d="M181 510C139 418 163 322 248 279C314 246 365 276 372 336C380 408 296 488 181 510Z" fill="url(#deepLeaf)"/>
+    <path d="M194 493C241 411 290 345 355 300M235 454L202 389M282 400L267 331M316 359L342 327" stroke="#ACC19A" stroke-opacity=".28" stroke-width="4" stroke-linecap="round"/>
+    <path d="M282 398C278 282 326 179 424 151C511 126 573 181 558 259C542 344 438 408 282 398Z" fill="url(#brightLeaf)" mask="url(#cutouts)"/>
+    <path d="M299 384C357 309 412 239 510 180M367 302L348 224M417 254L420 184M463 217L493 172M343 336L416 351" stroke="#D2D6A4" stroke-opacity=".25" stroke-width="5" stroke-linecap="round"/>
+    <path d="M84 584C99 433 132 287 199 116" stroke="#466B48" stroke-width="6" stroke-linecap="round"/>
+    <use href="#fernlet" transform="translate(99 489) rotate(153) scale(.8)"/><use href="#fernlet" transform="translate(109 448) rotate(-29) scale(.82)"/><use href="#fernlet" transform="translate(120 403) rotate(151) scale(.78)"/><use href="#fernlet" transform="translate(132 359) rotate(-27) scale(.75)"/><use href="#fernlet" transform="translate(145 313) rotate(148) scale(.68)"/><use href="#fernlet" transform="translate(160 270) rotate(-25) scale(.62)"/><use href="#fernlet" transform="translate(176 226) rotate(145) scale(.55)"/><use href="#fernlet" transform="translate(190 185) rotate(-23) scale(.46)"/>
+    <path d="M24 600C115 482 239 438 382 445C464 449 526 426 596 362" stroke="#315940" stroke-width="7" stroke-linecap="round"/>
+    <use href="#fernlet" transform="translate(130 503) rotate(205) scale(.7)"/><use href="#fernlet" transform="translate(180 475) rotate(25) scale(.72)"/><use href="#fernlet" transform="translate(236 455) rotate(201) scale(.65)"/><use href="#fernlet" transform="translate(295 447) rotate(20) scale(.62)"/><use href="#fernlet" transform="translate(353 447) rotate(198) scale(.58)"/><use href="#fernlet" transform="translate(414 443) rotate(16) scale(.52)"/><use href="#fernlet" transform="translate(475 424) rotate(192) scale(.46)"/><use href="#fernlet" transform="translate(530 394) rotate(11) scale(.4)"/>
+    <path d="M333 377C396 394 457 435 500 509" stroke="#425D3A" stroke-width="4" stroke-linecap="round"/>
+    <use href="#berry" transform="translate(423 432)"/><use href="#berry" transform="translate(451 460) scale(.85)"/><use href="#berry" transform="translate(474 489) scale(.72)"/><use href="#berry" transform="translate(401 416) scale(.64)"/>
+  </g>
+</svg>

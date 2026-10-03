@@ -1,0 +1,21 @@
+<!-- Original flowering sprig used as a reusable foreground accent around the frame. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 640" fill="none">
+  <defs>
+    <linearGradient id="stem" x1="70" y1="620" x2="330" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#163A28"/><stop offset=".55" stop-color="#47704A"/><stop offset="1" stop-color="#789361"/></linearGradient>
+    <linearGradient id="leaf" x1="0" y1="0" x2="100" y2="50" gradientUnits="userSpaceOnUse"><stop stop-color="#71926A"/><stop offset=".5" stop-color="#355E42"/><stop offset="1" stop-color="#122F22"/></linearGradient>
+    <radialGradient id="petal"><stop stop-color="#F1D7F0"/><stop offset=".35" stop-color="#C68ACB"/><stop offset=".72" stop-color="#8A5A9D"/><stop offset="1" stop-color="#4B315E"/></radialGradient>
+    <filter id="shadow" x="-40%" y="-30%" width="190%" height="180%"><feGaussianBlur in="SourceAlpha" stdDeviation="7"/><feOffset dx="7" dy="10"/><feColorMatrix values="0 0 0 0 0 0 0 0 0 0.03 0 0 0 0 0.02 0 0 0 .72 0"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <g id="leaflet"><path d="M0 0C22-39 68-47 97-20C80 23 37 31 0 0Z" fill="url(#leaf)"/><path d="M9-2C37-10 63-17 85-24" stroke="#CAD2A7" stroke-opacity=".27" stroke-width="3"/></g>
+    <g id="flower"><ellipse cx="0" cy="-17" rx="12" ry="20" fill="url(#petal)"/><ellipse cx="16" cy="-5" rx="12" ry="20" transform="rotate(72 16 -5)" fill="url(#petal)"/><ellipse cx="10" cy="14" rx="12" ry="20" transform="rotate(144 10 14)" fill="url(#petal)"/><ellipse cx="-10" cy="14" rx="12" ry="20" transform="rotate(-144 -10 14)" fill="url(#petal)"/><ellipse cx="-16" cy="-5" rx="12" ry="20" transform="rotate(-72 -16 -5)" fill="url(#petal)"/><circle r="8" fill="#E8CE87"/><circle r="3" fill="#765444"/></g>
+  </defs>
+  <g filter="url(#shadow)">
+    <path d="M56 640C81 513 148 441 230 370C306 304 335 218 331 80" stroke="#0B2418" stroke-width="14" stroke-linecap="round"/>
+    <path d="M62 640C87 515 153 445 235 374C312 307 341 220 337 80" stroke="url(#stem)" stroke-width="7" stroke-linecap="round"/>
+    <path d="M128 505C91 469 73 427 76 376M197 406C158 364 143 320 151 267M273 328C242 283 232 242 244 193M318 231C282 197 267 160 271 121" stroke="#3D6746" stroke-width="5" stroke-linecap="round"/>
+    <use href="#leaflet" transform="translate(100 492) rotate(205) scale(.9)"/><use href="#leaflet" transform="translate(83 427) rotate(14) scale(.72)"/><use href="#leaflet" transform="translate(170 424) rotate(197)"/><use href="#leaflet" transform="translate(148 337) rotate(13) scale(.82)"/><use href="#leaflet" transform="translate(249 351) rotate(203) scale(.88)"/><use href="#leaflet" transform="translate(238 267) rotate(13) scale(.74)"/><use href="#leaflet" transform="translate(315 246) rotate(202) scale(.73)"/><use href="#leaflet" transform="translate(270 152) rotate(12) scale(.63)"/>
+    <path d="M188 420C232 428 266 453 292 494M275 327C314 336 343 358 365 395M318 218C357 229 380 251 397 283" stroke="#476846" stroke-width="4" stroke-linecap="round"/>
+    <use href="#flower" transform="translate(77 367) scale(.82)"/><use href="#flower" transform="translate(151 257) scale(.9)"/><use href="#flower" transform="translate(244 183) scale(.72)"/><use href="#flower" transform="translate(336 68)"/>
+    <use href="#flower" transform="translate(299 503) scale(.62)"/><use href="#flower" transform="translate(370 403) scale(.7)"/><use href="#flower" transform="translate(402 290) scale(.55)"/>
+    <circle cx="327" cy="40" r="11" fill="#8D5BA0"/><circle cx="314" cy="24" r="7" fill="#B77FC0"/><circle cx="355" cy="34" r="8" fill="#754988"/>
+  </g>
+</svg>

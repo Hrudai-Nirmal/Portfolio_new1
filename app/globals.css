@@ -1,32 +1,56 @@
-/* Keep the stage neutral until hero typography and navigation are agreed. */
-:root { color-scheme: dark; background: #000; color: #d6e6e9; font-family: Arial, Helvetica, sans-serif; }
+/* Build the hero as a layered forest frame with a protected central reading area. */
+:root { color-scheme: dark; background: #020504; color: #e6eee9; font-family: Arial, Helvetica, sans-serif; }
 * { box-sizing: border-box; }
-body { margin: 0; }
-.peacock-stage { position: relative; width: 100%; height: 100dvh; overflow: hidden; background: #000; }
-.peacock-artwork { position: absolute; right: 4%; bottom: 0; z-index: 1; width: min(66.328125dvh, 55vw); height: auto; display: block; }
+html, body { margin: 0; overflow-x: hidden; }
+.forest-stage { position: relative; isolation: isolate; width: 100%; height: 100dvh; overflow: hidden; background: #020504; }
+.forest-atmosphere { position: absolute; inset: 0; z-index: 0; background: radial-gradient(circle at 50% 46%, rgba(29, 65, 49, .19) 0, rgba(8, 20, 15, .08) 31%, transparent 58%), radial-gradient(circle at 52% 45%, #07110d 0, #020504 66%); }
+.forest-atmosphere::after { position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(177, 219, 190, .22) 0 1px, transparent 1.5px); background-size: 71px 83px; opacity: .16; content: ''; mask-image: radial-gradient(circle, transparent 20%, #000 88%); }
+.forest-frame { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.forest-vine, .forest-corner, .forest-flora { position: absolute; display: block; max-width: none; height: auto; filter: drop-shadow(0 14px 24px rgba(0, 0, 0, .58)); }
+.forest-vine-top { top: -1.5%; left: 0; width: 100%; }
+.forest-vine-bottom { bottom: -2%; left: 0; width: 100%; }
+.forest-vine-left { top: 0; left: -1%; width: auto; height: 100%; }
+.forest-vine-right { top: 0; right: -1%; width: auto; height: 100%; }
+.forest-corner { z-index: 3; width: min(42vw, 540px); }
+.forest-corner-top-right { top: -15%; right: -10%; transform: rotate(184deg); }
+.forest-corner-bottom-left { bottom: -18%; left: -9%; transform: rotate(4deg); }
+.forest-flora { z-index: 4; width: min(19vw, 260px); }
+.forest-flora-top-left { top: -14%; left: 3%; transform: rotate(152deg); }
+.forest-flora-bottom-right { right: 4%; bottom: -17%; transform: rotate(-26deg); }
+.hero-copy { position: absolute; top: 50%; left: 50%; z-index: 5; width: min(64vw, 760px); transform: translate(-50%, -50%); text-align: center; text-shadow: 0 2px 25px #000, 0 0 60px rgba(0, 0, 0, .9); }
+.hero-name { margin: 0 0 30px; color: #a7c5b2; font-size: 12px; font-weight: 600; letter-spacing: .28em; text-transform: uppercase; }
+.hero-copy h1 { margin: 0; color: #eef4f0; font-size: clamp(44px, 6vw, 88px); font-weight: 500; line-height: 1.03; letter-spacing: -.058em; }
+.hero-copy h1 span { color: #7db59a; }
+.hero-description { max-width: 460px; margin: 28px auto 0; color: #91a79b; font-size: 15px; line-height: 1.8; }
+.hero-note { margin: 38px 0 0; color: #61796c; font-family: monospace; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; }
 
-/* Preserve the source proportions instead of stretching the bird on narrow screens. */
 @media (max-width: 640px) {
-  .peacock-artwork { right: 0; width: min(66.328125dvh, 80vw); }
-}
-
-/* Keep demo copy in its own column so the unmodified SVG never sits behind text. */
-.hero-copy { position: absolute; left: 7.5%; top: 50%; z-index: 2; transform: translateY(-50%); width: min(45%, 620px); }
-.hero-name { margin: 0 0 30px; color: #b5c5ca; font-size: 12px; font-weight: 500; letter-spacing: .23em; text-transform: uppercase; }
-.hero-copy h1 { margin: 0; color: #f1f4f4; font-size: clamp(40px, 5.6vw, 84px); font-weight: 500; line-height: 1.06; letter-spacing: -.055em; }
-.hero-copy h1 span { color: #7cb6c7; }
-.hero-description { max-width: 375px; margin: 30px 0 0; color: #8d9ba1; font-size: 16px; line-height: 1.8; }
-.hero-note { margin: 44px 0 0; color: #64777f; font-family: monospace; font-size: 11px; letter-spacing: .13em; text-transform: uppercase; }
-@media (max-width: 640px) {
-  .hero-copy { left: 8%; top: 8%; transform: none; width: 84%; }
+  .forest-vine-top, .forest-vine-bottom { width: 165%; }
+  .forest-vine-top { left: -30%; }
+  .forest-vine-bottom { left: -34%; }
+  .forest-vine-left, .forest-vine-right { height: 108%; }
+  .forest-vine-left { left: -9%; }
+  .forest-vine-right { right: -10%; }
+  .forest-corner { width: 78vw; opacity: .88; }
+  .forest-corner-top-right { top: -10%; right: -42%; }
+  .forest-corner-bottom-left { bottom: -10%; left: -42%; }
+  .forest-flora { width: 40vw; opacity: .9; }
+  .forest-flora-top-left { top: -8%; left: -8%; }
+  .forest-flora-bottom-right { right: -7%; bottom: -10%; }
+  .hero-copy { width: calc(100% - 64px); }
   .hero-name { margin-bottom: 22px; font-size: 10px; }
-  .hero-copy h1 { font-size: clamp(34px, 11vw, 56px); }
-  .hero-description { max-width: 320px; margin-top: 22px; font-size: 14px; line-height: 1.7; }
-  .hero-note { margin-top: 24px; font-size: 9px; }
+  .hero-copy h1 { font-size: clamp(42px, 13vw, 62px); }
+  .hero-description { max-width: 310px; margin-top: 22px; font-size: 13px; line-height: 1.7; }
+  .hero-note { margin-top: 26px; font-size: 9px; }
 }
-@media (max-height: 600px) and (min-width: 641px) {
+
+@media (max-height: 560px) and (min-width: 641px) {
   .hero-name { margin-bottom: 14px; }
-  .hero-copy h1 { font-size: clamp(30px, 5vw, 54px); }
-  .hero-description { margin-top: 16px; font-size: 13px; line-height: 1.5; }
-  .hero-note { margin-top: 16px; font-size: 9px; }
+  .hero-copy h1 { font-size: clamp(34px, 5vw, 58px); }
+  .hero-description { margin-top: 15px; font-size: 13px; line-height: 1.5; }
+  .hero-note { margin-top: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .forest-frame { transform: none; }
 }
