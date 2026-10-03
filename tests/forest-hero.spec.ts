@@ -25,6 +25,10 @@ test('slides vines clockwise and foliage outward, then reverses both on return',
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/');
     await expect(page.locator('.forest-scroll')).toHaveAttribute('data-animation-ready', 'true');
+    await page.evaluate(() => window.scrollTo(0, 400));
+    await expect.poll(() => page.locator('[data-motion="vine"]').evaluateAll((vines) =>
+      vines.every((vine) => Number(getComputedStyle(vine).opacity) < 0.05)
+    )).toBe(true);
     await page.evaluate(() => window.scrollTo(0, 650));
     for (const [edge, axis, sign] of [['top', 'm41', 1], ['right', 'm42', 1], ['bottom', 'm41', -1], ['left', 'm42', -1]] as const) {
       await expect.poll(() => page.locator(`[data-motion="vine"][data-edge="${edge}"]`).evaluate((element, coordinates) =>

@@ -46,12 +46,14 @@ export function ForestScroll({ children }: { children: ReactNode }) {
       // Each layer declares its own exit; child breeze transforms cannot override this travel.
       for (const edge of scrollElement.querySelectorAll<HTMLElement>('[data-edge]')) {
         const direction = edge.dataset.exit;
+        // Vines travel along an entire edge; finish early to match the shorter outward leaf exit.
+        const isVine = edge.dataset.motion === 'vine';
         timeline.to(edge, {
           x: () => direction === 'right' ? window.innerWidth * 1.15 : direction === 'left' ? -window.innerWidth * 1.15 : 0,
           y: () => direction === 'down' ? window.innerHeight * 1.15 : direction === 'up' ? -window.innerHeight * 1.15 : 0,
-          duration: 1,
+          duration: isVine ? 0.32 : 1,
         }, 0);
-        timeline.to(edge, { opacity: 0, duration: 0.25 }, 0.65);
+        timeline.to(edge, { opacity: 0, duration: isVine ? 0.14 : 0.25 }, isVine ? 0.18 : 0.65);
       }
       timeline.to(scrollElement.querySelector('.scroll-cue'), { opacity: 0, duration: 0.2 }, 0);
     }, scrollElement);
