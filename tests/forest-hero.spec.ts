@@ -20,7 +20,7 @@ test('shows the original peacock right of the copy with loaded realistic foliage
   } catch (error) { throw new Error('Restored forest composition failed', { cause: error }); }
 });
 
-test('slides vines clockwise and foliage outward, then reverses both on return', async ({ page }) => {
+test('slides vines clockwise and swings rooted foliage, then reverses both on return', async ({ page }) => {
   try {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/');
@@ -35,15 +35,9 @@ test('slides vines clockwise and foliage outward, then reverses both on return',
         new DOMMatrix(getComputedStyle(element).transform)[coordinates.axis] * coordinates.sign, { axis, sign }
       )).toBeGreaterThan(150);
     }
-    for (const [edge, axis, crossAxis, sign] of [['top', 'm42', 'm41', -1], ['right', 'm41', 'm42', 1], ['bottom', 'm42', 'm41', 1], ['left', 'm41', 'm42', -1]] as const) {
-      const foliage = page.locator(`[data-motion="foliage"][data-edge="${edge}"]`);
-      await expect.poll(() => foliage.evaluateAll((elements, coordinates) =>
-        elements.every((element) => {
-          const matrix = new DOMMatrix(getComputedStyle(element).transform);
-          return matrix[coordinates.axis] * coordinates.sign > 150 && Math.abs(matrix[coordinates.crossAxis]) < 1;
-        }), { axis, crossAxis, sign }
-      )).toBe(true);
-    }
+    await expect.poll(() => page.locator('.foliage-swing').evaluateAll((branches) => branches.every((branch) =>
+      Math.abs(new DOMMatrix(getComputedStyle(branch).transform).b) > 0.2
+    ))).toBe(true);
     await page.evaluate(() => window.scrollTo(0, 1150));
     await expect.poll(() => page.locator('.forest-frame').evaluate((frame) =>
       [...frame.children].every((edge) => Number(getComputedStyle(edge).opacity) < 0.05)

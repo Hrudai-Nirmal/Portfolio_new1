@@ -1,6 +1,6 @@
 /** Keep artwork and copy server-rendered while the scroll shell animates decorative layers. */
 import Image from 'next/image';
-import { Fragment } from 'react';
+import { Fragment, type ReactNode } from 'react';
 import { ForestScroll } from './forest-scroll';
 import { TextTunnel } from './text-tunnel';
 import { PeacockArtwork } from './peacock-artwork';
@@ -11,6 +11,13 @@ const EDGE_VINES = [
   { edge: 'bottom', flow: 'left-to-right', exit: 'left', outward: 'down' },
   { edge: 'left', flow: 'top-to-bottom', exit: 'up', outward: 'left' },
 ] as const;
+
+/** Give each placement independent rooted scroll, breeze, and contact transforms. */
+function FoliageBranch({ children, variant = 'cover' }: { children: ReactNode; variant?: string }) {
+  return <div className={`foliage-swing foliage-${variant}`}>
+    <div className="forest-breeze"><div className="foliage-impact">{children}</div></div>
+  </div>;
+}
 
 /** Weave moving woody vines between background leaves and gently swaying foreground ferns. */
 export function ForestHero() {
@@ -30,20 +37,21 @@ export function ForestHero() {
             {EDGE_VINES.map(({ edge, flow, exit, outward }) => (
               <Fragment key={edge}>
                 <div className={`forest-edge forest-edge-${edge} forest-back-leaves`} data-edge={edge} data-motion="foliage" data-exit={outward}>
-                  <Image className="edge-vine" src="/foliage/realistic-vine.webp" width={2167} height={726}
-                    sizes="100vw" alt="" loading="eager" unoptimized />
+                  <FoliageBranch><Image className="edge-vine" src="/foliage/realistic-vine.webp" width={2167} height={726}
+                    sizes="100vw" alt="" loading="eager" unoptimized /></FoliageBranch>
                 </div>
                 <div className={`forest-edge forest-edge-${edge} forest-mid-vine`} data-edge={edge} data-flow={flow} data-motion="vine" data-exit={exit}>
                   <Image className="woody-vine" src="/foliage/woody-vine.webp" width={2172} height={724}
                     sizes="100vw" alt="" loading="eager" unoptimized />
                 </div>
                 <div className={`forest-edge forest-edge-${edge} forest-front-leaves`} data-edge={edge} data-motion="foliage" data-exit={outward}>
-                  <div className="forest-breeze">
+                  <FoliageBranch variant="near">
                     <Image className="edge-fern edge-fern-near" src="/foliage/realistic-fern.webp" width={1254} height={1254}
-                      sizes="35vw" alt="" loading="eager" unoptimized />
+                      sizes="35vw" alt="" loading="eager" unoptimized /></FoliageBranch>
+                  <FoliageBranch variant="far">
                     <Image className="edge-fern edge-fern-far" src="/foliage/realistic-fern.webp" width={1254} height={1254}
                       sizes="25vw" alt="" loading="eager" unoptimized />
-                  </div>
+                  </FoliageBranch>
                 </div>
               </Fragment>
             ))}

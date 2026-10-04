@@ -27,7 +27,17 @@ body { overflow-x: clip; }
 .forest-back-leaves { z-index: 0; }
 .forest-mid-vine { z-index: 1; }
 .forest-front-leaves { z-index: 2; }
-.forest-breeze { position: absolute; inset: 0; transform-origin: center; }
+/* All nested motion shares a root just beyond its edge; only rotation bends the foliage. */
+.foliage-swing, .forest-breeze, .foliage-impact { position: absolute; inset: 0; transform-origin: var(--foliage-root); }
+.foliage-swing { --root-along: 50%; }
+.foliage-near { --root-along: 82%; }
+.foliage-far { --root-along: 28%; }
+.forest-edge-top .foliage-swing { --foliage-root: var(--root-along) -24px; }
+.forest-edge-bottom .foliage-swing { --foliage-root: var(--root-along) calc(100% + 24px); }
+.forest-edge-left .foliage-swing { --foliage-root: -24px var(--root-along); }
+.forest-edge-right .foliage-swing { --foliage-root: calc(100% + 24px) var(--root-along); }
+.forest-edge-bottom .foliage-near, .forest-edge-left .foliage-near { --root-along: 12%; }
+.forest-edge-bottom .foliage-far, .forest-edge-left .foliage-far { --root-along: 74%; }
 .woody-vine { position: absolute; height: auto; max-width: none; filter: brightness(.78) saturate(.72) drop-shadow(0 5px 7px #0009); }
 .forest-edge-top .woody-vine { width: 112%; left: -6%; top: -15vw; }
 .forest-edge-bottom .woody-vine { width: 112%; right: -6%; bottom: -15vw; transform: rotate(180deg); }

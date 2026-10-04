@@ -42,9 +42,8 @@ export function ForestScroll({ children }: { children: ReactNode }) {
       };
       const stage = scrollElement.querySelector<HTMLElement>('.forest-stage')!;
       const breezeTweens = [...scrollElement.querySelectorAll<HTMLElement>('.forest-breeze')].map((cluster, index) =>
-        gsap.to(cluster, {
-          rotation: index % 2 === 0 ? 0.65 : -0.65,
-          y: index % 2 === 0 ? 4 : -4,
+        gsap.fromTo(cluster, { rotation: index % 2 === 0 ? -0.65 : 0.65 }, {
+          rotation: index % 2 === 0 ? 1.15 : -1.15,
           duration: 5.5 + index * 0.8,
           ease: 'sine.inOut',
           repeat: -1,
@@ -69,18 +68,57 @@ export function ForestScroll({ children }: { children: ReactNode }) {
           invalidateOnRefresh: true,
         },
       });
-      // Each layer declares its own exit; child breeze transforms cannot override this travel.
+      // Vines retain their existing edge travel. Foliage bends around rooted pivots without translating.
       for (const edge of scrollElement.querySelectorAll<HTMLElement>('[data-edge]')) {
         const direction = edge.dataset.exit;
-        // Vines travel along an entire edge; finish early to match the shorter outward leaf exit.
         const isVine = edge.dataset.motion === 'vine';
-        timeline.fromTo(edge, { x: 0, y: 0 }, {
+        if (isVine) timeline.fromTo(edge, { x: 0, y: 0 }, {
           x: () => direction === 'right' ? window.innerWidth * 1.15 : direction === 'left' ? -window.innerWidth * 1.15 : 0,
           y: () => direction === 'down' ? window.innerHeight * 1.15 : direction === 'up' ? -window.innerHeight * 1.15 : 0,
-          duration: isVine ? 0.55 : 1.3,
+          duration: 0.55,
         }, 0);
         timeline.fromTo(edge, { opacity: 1 }, { opacity: 0, duration: isVine ? 0.23 : 0.4 }, isVine ? 0.32 : 0.8);
       }
+      const branches = [...scrollElement.querySelectorAll<HTMLElement>('.foliage-swing')];
+      branches.forEach((branch, index) => {
+        // A deterministic shuffle looks varied but retains the same direction on refresh and reversal.
+        const direction = (index * 7 + 3) % 11 < 5 ? -1 : 1;
+        branch.dataset.fall = direction < 0 ? 'left' : 'right';
+        timeline.fromTo(branch, { rotation: 0 }, {
+          rotation: direction * (62 + index % 3 * 7), duration: 1.2, ease: 'power1.inOut',
+        }, 0);
+      });
+      const impactTweens = new Map<HTMLElement, gsap.core.Timeline>();
+      let previousPointer: { horizontal: number; vertical: number; time: number } | null = null;
+      const resetPointer = () => { previousPointer = null; };
+      const handlePointer = (event: PointerEvent) => {
+        if (event.pointerType !== 'mouse' || timeline.progress() > 0.13) { resetPointer(); return; }
+        const previous = previousPointer;
+        previousPointer = { horizontal: event.clientX, vertical: event.clientY, time: event.timeStamp };
+        if (!previous) return;
+        const elapsed = Math.max(16, event.timeStamp - previous.time);
+        const horizontalSpeed = (event.clientX - previous.horizontal) / elapsed;
+        const verticalSpeed = (event.clientY - previous.vertical) / elapsed;
+        const speed = Math.hypot(horizontalSpeed, verticalSpeed);
+        if (speed < 0.04) return;
+        for (const branch of branches) {
+          const artwork = branch.querySelector('img')!;
+          const bounds = artwork.getBoundingClientRect();
+          if (!bounds.width || event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) continue;
+          const impact = branch.querySelector<HTMLElement>('.foliage-impact')!;
+          const [rootHorizontal, rootVertical] = getComputedStyle(branch).transformOrigin.split(' ').map(parseFloat);
+          const stageBounds = stage.getBoundingClientRect();
+          const leverHorizontal = event.clientX - stageBounds.left - rootHorizontal;
+          const leverVertical = event.clientY - stageBounds.top - rootVertical;
+          const torque = leverHorizontal * verticalSpeed - leverVertical * horizontalSpeed;
+          const angle = Math.sign(torque) * Math.min(12, speed * 2.4);
+          impactTweens.get(impact)?.kill();
+          impactTweens.set(impact, gsap.timeline().to(impact, { rotation: angle, duration: 0.12, ease: 'power2.out' })
+            .to(impact, { rotation: 0, duration: 1.65, ease: 'elastic.out(1, 0.38)' }));
+        }
+      };
+      stage.addEventListener('pointermove', handlePointer, { passive: true });
+      stage.addEventListener('pointerleave', resetPointer);
       timeline.fromTo(scrollElement.querySelector('.scroll-cue'), { opacity: 1 }, { opacity: 0, duration: 0.2 }, 0);
       timeline.fromTo(scrollElement.querySelector('.hero-copy'), { opacity: 1 }, { opacity: 0, duration: 0.55, ease: 'power1.inOut' }, 0);
       // Measure the untransformed layout so refresh/resize never compounds an existing camera translation.
@@ -100,6 +138,10 @@ export function ForestScroll({ children }: { children: ReactNode }) {
       timeline.fromTo(scrollElement.querySelector('.tunnel-camera'), { z: 0 },
         { z: 7800, duration: 4.7, ease: 'none' }, 3.3);
       return () => {
+        stage.removeEventListener('pointermove', handlePointer);
+        stage.removeEventListener('pointerleave', resetPointer);
+        impactTweens.forEach((tween) => tween.kill());
+        gsap.set(branches.map((branch) => branch.querySelector('.foliage-impact')), { clearProps: 'transform' });
         gsap.ticker.remove(advanceScroll);
         lenis.off('scroll', ScrollTrigger.update);
         lenis.destroy();
